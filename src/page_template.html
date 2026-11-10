@@ -464,7 +464,7 @@ async function askClaude(){
 ふつうだった曲：\n${oks.map(name).join("\n") || "なし"}
 苦手だった曲：\n${dislikes.map(name).join("\n") || "なし"}
 すでに手元のリストにある曲（これ以外から選ぶ）：\n${Object.values(W).map(w => w.c + Q(w.w)).join("、")}
-上の好みに合いそうで、リストにない${KIND}の曲（または${KIND === "オペラ" ? "アリア・場面" : "楽章"}）を5つ選んでください。
+上の好みに合いそうで、リストにない${KIND}の曲（${KIND === "オペラ" ? "またはアリア・場面" : KIND === "吹奏楽" ? "オリジナル曲・マーチ・編曲もの" : "または楽章"}）を5つ選んでください。
 JSONの配列だけで答えてください。各要素は {"composer": 作曲家の日本語名, "title": 曲名の日本語, "part": 聴く部分（例：第2楽章）, "reason": なぜ合いそうか（40字以内、やさしい日本語）, "search": YouTubeで探すための英語の検索語} です。`;
   btn.disabled = true; out.innerHTML = `<p class="stat">考えています…（数十秒かかることがあります）</p>`;
   try {

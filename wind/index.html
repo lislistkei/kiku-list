@@ -1,0 +1,532 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head><body>
+<title>吹奏楽 聴くリスト</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* 演奏会のプログラム冊子：表紙 → 章の目次（チップ）→ 章ごとの曲目（番号・楽章・演奏時間）→ 豆知識 */
+:root{
+  --bg:#f6f4f0; --paper:#ffffff; --ink:#1d2433; --muted:#5f6675;
+  --line:#e1ddd4; --accent:#8a2433; --accent-ink:#ffffff; --soft:#f3e7e8; --note:#f4efe2; --note-ink:#5b4a1f;
+  --f-display:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#15171d; --paper:#1e2129; --ink:#ecebe7; --muted:#a6a9b3; --line:#2f333d;
+  --accent:#e0798a; --accent-ink:#1a1014; --soft:#3a2328; --note:#2a2619; --note-ink:#e6d7a8; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#15171d; --paper:#1e2129; --ink:#ecebe7; --muted:#a6a9b3; --line:#2f333d;
+  --accent:#e0798a; --accent-ink:#1a1014; --soft:#3a2328; --note:#2a2619; --note-ink:#e6d7a8; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.7;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-size:12px;letter-spacing:.12em;color:var(--muted)}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,7vw,38px);line-height:1.3;margin:0;text-wrap:balance}
+.lead{margin:0;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.search{display:flex;flex-direction:column;gap:6px}
+.mode{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.mode button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:5px 12px;cursor:pointer}
+.mode button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg);font-weight:700}
+.mode small{flex-basis:100%;font-size:12px}
+.search label{font-size:13px;color:var(--muted)}
+.search input{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);width:100%;box-sizing:border-box}
+.search input:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.hits{font-size:13px;color:var(--muted);min-height:1.2em}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px}
+nav.toc a{font-size:13px;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:5px 12px}
+details.sec{background:transparent;border-top:1px solid var(--line);padding-top:6px}
+details.sec>summary{cursor:pointer;list-style:none;display:flex;flex-direction:column;gap:2px;padding:10px 0}
+details.sec>summary::-webkit-details-marker{display:none}
+.sec-title{font-family:var(--f-display);font-weight:600;font-size:22px;display:flex;align-items:baseline;gap:10px}
+.sec-title::before{content:"＋";font-family:var(--f-body);font-size:16px;color:var(--accent);width:1em;display:inline-block}
+details[open] .sec-title::before{content:"－"}
+.sec-sub{font-size:13px;color:var(--muted);padding-left:1.6em}
+.secbody{display:flex;flex-direction:column;gap:14px;padding-bottom:18px}
+.playall{display:flex;flex-wrap:wrap;gap:8px}
+.playall a{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:700;font-size:15px;padding:10px 14px;border-radius:10px}
+h3.grp{font-family:var(--f-display);font-weight:600;font-size:17px;margin:6px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+h3.grp a{font-family:var(--f-body);font-size:13px;font-weight:500;color:var(--accent);text-decoration:none}
+ol.program{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:2em 1fr;gap:4px 10px}
+.no{font-family:var(--f-display);font-weight:800;font-size:20px;color:var(--accent);line-height:1.35;font-variant-numeric:tabular-nums}
+.body{min-width:0;display:flex;flex-direction:column;gap:6px}
+.composer{font-size:13px;color:var(--muted);letter-spacing:.04em}
+.work{font-family:var(--f-display);font-weight:600;font-size:18px;line-height:1.45;margin:0}
+.part{display:inline-block;font-family:var(--f-body);font-size:13px;font-weight:500;background:var(--soft);color:var(--ink);padding:1px 8px;border-radius:6px;margin-top:3px}
+.time{font-family:var(--f-body);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.point,.trivia{margin:0;font-size:14.5px;border-radius:8px;padding:8px 10px}
+.point{background:var(--soft);color:var(--ink)}
+.trivia{background:var(--note);color:var(--note-ink)}
+.point b,.trivia b{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;margin-bottom:2px}
+details.lyr,details.about{border:1px solid var(--line);border-radius:8px;font-size:14.5px}
+details.about>summary{cursor:pointer;padding:8px 10px;font-size:13px;font-weight:700;color:var(--ink)}
+details.about .lyt{padding:0 12px 12px;white-space:pre-wrap;line-height:1.8;overflow-wrap:anywhere}
+details.lyr>summary{cursor:pointer;padding:8px 10px;font-size:13px;font-weight:700;color:var(--accent)}
+details.lyr .lyt{padding:0 12px 12px;white-space:pre-wrap;line-height:1.85;overflow-wrap:anywhere}
+details.lyr .bi{padding:0 12px 12px;line-height:1.7;overflow-wrap:anywhere}
+details.lyr .bi .o{margin:6px 0 0;font-size:13px;color:var(--muted);font-style:italic;font-family:Georgia,"Times New Roman",serif}
+details.lyr .bi .j{margin:0}
+details.lyr .bi .sp{margin:12px 0 0;font-size:12.5px;font-weight:700;color:var(--accent)}
+details.lyr .bi .gap{height:10px}
+details.lyr,details.about{scroll-margin-top:calc(64px + env(safe-area-inset-top,0px))}
+button.fold{display:block;margin:4px auto 10px;font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--bg);color:var(--accent);border-radius:999px;padding:6px 18px;cursor:pointer}
+details.lyr .lyn{margin:0 12px 8px;font-size:12.5px;color:var(--muted)}
+.perf{font-size:12px;color:var(--muted);margin:0;overflow-wrap:anywhere}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.links a{font-size:14px;text-decoration:none;border-radius:8px;padding:7px 12px;font-weight:700}
+.links a.go{background:var(--ink);color:var(--bg)}
+.links a.ytb,.playall a.ytb{background:#c4302b;color:#fff;font-weight:700}
+.links a.from{border:1px solid var(--line);color:var(--ink);font-weight:500}
+a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.rate{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rate span{font-size:12px;color:var(--muted)}
+.rate button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:4px 12px;cursor:pointer}
+.rate button[aria-pressed="true"][data-r="like"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.rate button[aria-pressed="true"][data-r="ok"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.rate button[aria-pressed="true"][data-r="dislike"]{background:var(--muted);border-color:var(--muted);color:var(--bg)}
+.rate button:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.recs{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.recs h2{font-family:var(--f-display);font-weight:600;font-size:20px;margin:0}
+.recs .stat{font-size:14px;color:var(--muted);margin:0}
+.recs ol{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:8px}
+.recs li{font-size:15px}
+.recs li small{display:block;color:var(--muted);font-size:13px}
+.recs li a{color:var(--accent);font-weight:700;text-decoration:none}
+.recs .btns{display:flex;flex-wrap:wrap;gap:8px}
+.recs .btns a,.recs .btns button{font:inherit;font-size:14px;font-weight:700;border-radius:10px;padding:9px 14px;text-decoration:none;cursor:pointer}
+.recs .btns a{background:var(--accent);color:var(--accent-ink);border:0}
+.recs .btns button{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.recs .note{font-size:12px;color:var(--muted);margin:0}
+.tips{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px}
+.tips h2{font-family:var(--f-display);font-weight:600;font-size:19px;margin:0}
+.tips ul{margin:6px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+footer{font-size:12px;color:var(--muted)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:16;background:var(--bg)}
+.stick{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:var(--bg);border-bottom:1px solid var(--line);
+  padding-block:8px;display:flex;flex-direction:column;gap:8px}
+.barrow{display:flex;gap:8px;align-items:center}
+.barrow button,.barrow a{font:inherit;font-size:14px;font-weight:700;border-radius:999px;padding:8px 14px;cursor:pointer;text-decoration:none;white-space:nowrap}
+#tocbtn{background:var(--ink);color:var(--bg);border:0;flex:1 1 auto;text-align:left}
+.barrow a,#totop{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.barrow button:focus-visible,.barrow a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.stick nav.toc{max-height:55vh;overflow-y:auto;padding-bottom:4px}
+[hidden]{display:none!important}
+.player{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--paper);border-top:1px solid var(--line);
+  box-shadow:0 -4px 16px rgba(0,0,0,.18);padding:8px max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.player .pin{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
+.player .ph{display:flex;align-items:center;gap:8px;font-size:13px}
+.player .ph span{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.player .ph a,.player .ph button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:4px 10px;text-decoration:none;cursor:pointer;white-space:nowrap}
+.player .pv{position:relative;width:100%;aspect-ratio:16/9;max-height:34vh;background:#000;border-radius:8px;overflow:hidden}
+.player iframe,.player #pframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.player .pmsg{margin:0;font-size:12.5px;color:var(--accent)}
+body.playing{padding-bottom:calc(40vh + 40px)}
+details.sec,#recs{scroll-margin-top:calc(70px + env(safe-area-inset-top,0px))}
+/* スマホ：横の余白をつめ、字をひとまわり小さく（縦長になりすぎないように） */
+@media (max-width:600px){
+  body{font-size:14.5px;line-height:1.6;padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+  .wrap{gap:16px}
+  .secbody{gap:10px}
+  ol.program{gap:8px}
+  .card{padding:10px 10px;gap:3px 6px;grid-template-columns:1.5em 1fr;border-radius:10px}
+  .no{font-size:16px}
+  .body{gap:5px}
+  .composer{font-size:12px}
+  .work{font-size:16px;line-height:1.4}
+  .part,.time{font-size:12px}
+  .point,.trivia{font-size:13px;line-height:1.6;padding:6px 8px}
+  .point b,.trivia b{font-size:11px;margin-bottom:0}
+  .links a{font-size:13px;padding:6px 10px}
+  .rate button{font-size:12px;padding:3px 10px}
+  details.lyr,details.about{font-size:13px}
+  details.about>summary{padding:6px 8px;font-size:12.5px}
+  details.about .lyt{padding:0 8px 8px;line-height:1.7}
+  details.lyr>summary{padding:6px 8px;font-size:12.5px}
+  details.lyr .lyt,details.lyr .bi{padding:0 8px 8px;line-height:1.65}
+  details.lyr .bi .o{font-size:12px;margin-top:4px}
+  details.lyr .bi .sp{margin-top:8px;font-size:12px}
+  details.lyr .bi .gap{height:6px}
+  details.lyr .lyn{margin:0 8px 6px;font-size:12px}
+  .sec-title{font-size:19px}
+  .sec-sub{font-size:12px}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">吹奏楽の名曲とマーチを、YouTubeで</div>
+    <h1>吹奏楽 聴くリスト</h1>
+    <p class="lead">マーチを中心に、吹奏楽のための名曲、コンクールの課題曲、ポップスまで。曲ごとに「聴きどころ」と豆知識つき。見出しをタップすると開きます。</p>
+    <div class="meta"><span id="m-works">—曲</span><span id="m-secs">—のリスト</span><span>公式チャンネルを中心に選曲</span></div>
+    <div class="search">
+      <label for="q">曲名・作曲家・ことばで探す（例：スーザ、課題曲、野球）</label>
+      <input id="q" type="search" placeholder="さがす" autocomplete="off">
+      <div class="hits" id="hits"></div>
+    </div>
+    <div class="mode" id="mode" role="group" aria-label="再生のしかた" hidden>
+      <span>▶を押したら：</span><button type="button" data-m="page" aria-pressed="true">このページで再生</button><button type="button" data-m="app" aria-pressed="false">YouTubeアプリで再生</button>
+      <small>画面を消したり、ほかのアプリを使ったりしながら聴くときは「YouTubeアプリで再生」に。</small>
+    </div>
+  </header>
+
+  <div class="stick">
+    <div class="barrow">
+      <button type="button" id="tocbtn" aria-expanded="false" aria-controls="toc">☰ 目次をひらく</button>
+      <a href="#recs">おすすめ</a>
+      <button type="button" id="totop">▲ 上へ</button>
+    </div>
+    <nav class="toc" id="toc" aria-label="章の目次" hidden></nav>
+  </div>
+
+  <section class="recs" id="recs" aria-live="polite">
+    <h2>あなたへのおすすめ</h2>
+    <p class="stat" id="r-stat">聴いた曲に「好き・ふつう・苦手」をつけると、ここに次のおすすめが出ます。</p>
+    <ol id="r-list"></ol>
+    <div class="btns" id="r-btns"></div>
+    <div id="ai-out"></div>
+    <p class="note" id="r-note"></p>
+  </section>
+
+  <main id="secs"></main>
+
+  <section class="tips">
+    <h2>吹奏楽の聴き方のコツ</h2>
+    <ul>
+      <li><b>マーチは「3つの部分」を聴きわける</b>。元気な第1マーチ・第2マーチのあと、まん中で「トリオ」というおだやかな部分に変わり、最後にまた盛り上がります。</li>
+      <li><b>同じ曲を楽団を変えて聴く</b>。アメリカの軍楽隊、日本の学校の吹奏楽部、プロの楽団で、同じマーチでも響きがかなり違います。</li>
+      <li><b>主役の楽器を1つ決めて追いかける</b>。ピッコロ、トロンボーン、低音など、吹奏楽はどの楽器にも見せ場があります。</li>
+      <li><b>聴いたら「好き・ふつう・苦手」を押す</b>。上の「あなたへのおすすめ」に次の曲が出ます。</li>
+      <li><b>続けて再生のリストは一時的</b>。YouTubeで開いたあと「保存」を押すと、マイリストに残ります。</li>
+    </ul>
+  </section>
+
+  <footer><a href="../">← 聴くリストのトップへ</a>　動画はYouTubeの各チャンネルのものです。消されたり、見られなくなったりすることがあります。「動画：」のあとはチャンネル名です。豆知識の逸話には、言い伝えで真偽がはっきりしないものもあります（「〜と伝えられる」と書いたもの）。</footer>
+</div>
+
+<div class="player" id="player" hidden>
+  <div class="pin">
+    <div class="ph"><span id="ptitle"></span><a id="pyt" href="#">アプリで続きを</a><button type="button" id="pclose">✕ とじる</button></div>
+    <p class="pmsg" id="pmsg" hidden></p>
+    <div class="pv"><div id="pframe"></div></div>
+  </div>
+</div>
+
+<script>
+const DATA = {"works":{"stars":{"c":"スーザ","w":"星条旗よ永遠なれ","p":"全曲","pt":"最後のくり返しで、ピッコロが高い音で小鳥のように飛び回り、その下でトロンボーンが太い対旋律を吹きならす。3つのメロディが重なる大団円","tr":"1896年の暮れ、ヨーロッパ旅行から帰る船の上で頭の中にバンドが鳴り出した、とスーザ自身が書いている。1987年にアメリカの法律で「国の行進曲」に定められた","id":"DRQWP-TL4gk","len":"3:42","ch":"United States Marine Band"},"washington":{"c":"スーザ","w":"ワシントン・ポスト","p":"全曲","pt":"8分の6拍子の「タッタ、タッタ」と跳ねるリズム。重たい軍隊の足どりではなく、軽やかに踊りだしたくなる行進曲","tr":"新聞社ワシントン・ポストが開いた子どもの作文コンクールの表彰式のために、1889年に書かれた。この曲で踊る「ツーステップ」が大流行し、新聞社の名前が世界に広まった","id":"xiWIcNRZ_ps","len":"2:55","ch":"United States Marine Band"},"liberty":{"c":"スーザ","w":"自由の鐘","p":"全曲","pt":"中間部のくり返しで、本物の鐘（チャイム）がカーンと鳴る。のどかなメロディに鐘が加わる場面がこの曲の顔","tr":"イギリスのコメディ番組「空飛ぶモンティ・パイソン」のテーマ曲に使われたため、イギリスでは「笑いの曲」として知られている","id":"JpKLqQRRJBM","len":"3:42","ch":"United States Marine Band"},"semper":{"c":"スーザ","w":"センパー・フィデリス","p":"全曲","pt":"中ほどで太鼓だけが残り、そこへラッパの合図のようなフレーズが何度もくり返される。だんだん楽器が増えて行進が近づいてくる","tr":"「つねに忠実に」という意味のラテン語で、アメリカ海兵隊のモットー。スーザはかつて楽長をつとめた海兵隊バンドにこの曲をささげ、今も海兵隊の公式の行進曲になっている","id":"qgABUZ4i9co","len":"3:44","ch":"United States Marine Band"},"thunderer":{"c":"スーザ","w":"雷神","p":"全曲","pt":"最後の部分で、低音の楽器と太鼓が「ドドン」と雷のように打ちこまれる。明るいメロディとのかけあいが楽しい","tr":"題の「雷神（サンダラー）」がだれを指すのか、スーザは最後まで明かさなかった","id":"YRmRrKB6yXE","len":"2:59","ch":"United States Marine Band"},"capitan":{"c":"スーザ","w":"エル・カピタン","p":"全曲","pt":"ゆったりした2拍子で始まり、途中から6拍子の軽快な歩みに変わる。拍子が変わる瞬間に注目","tr":"スーザは行進曲だけでなく喜歌劇（オペレッタ）も書いていた。その代表作『エル・カピタン』（1896年）の歌をつなげて作った行進曲","id":"h5m4iJNyq0M","len":"2:28","ch":"United States Marine Band"},"emblem":{"c":"バグリー","w":"国民の象徴","p":"全曲","pt":"はじめの部分に、アメリカ国歌「星条旗」の出だしのメロディが組みこまれている。堂々とした、アメリカの行進曲の王道","tr":"作曲者バグリーはコルネット（トランペットの仲間）奏者で、行進曲はほとんどこの1曲で名を残した。アメリカの軍楽隊や学校のバンドで今もよく演奏される","id":"fSq7koSJlBQ","len":"3:17","ch":"United States Marine Band"},"barnum":{"c":"キング","w":"バーナムとベイリーのお気に入り","p":"全曲","pt":"息つくひまもない速さで、トロンボーンやチューバが走り回る。サーカスの象や曲芸師が次々に出てくるようなにぎやかさ","tr":"作曲者キングは、サーカス団「バーナム・アンド・ベイリー」の楽団で演奏し、のちに指揮もした人。サーカスのために書いたマーチがたくさんある","id":"03T8Vazx8iE","len":"2:39","ch":"United States Marine Band"},"lassus":{"c":"フィルモア","w":"トロンボーンの悪ふざけ","p":"全曲","pt":"トロンボーンがスライドを動かして「ブワワ〜ン」とずり上がる音（グリッサンド）を連発する。トロンボーンが主役の、笑いをさそうマーチ","tr":"フィルモアはトロンボーンが大好きで、「ずり上がる音」を使った曲をシリーズのようにたくさん書いた","id":"TLCr2rFDNmA","len":"2:58","ch":"Dallas Wind Symphony - Topic"},"amsalute":{"c":"グールド","w":"アメリカン・サリュート","p":"全曲","pt":"有名な歌「ジョニーが凱旋するとき」を、ファゴットのささやきから始めて、最後は全員の大合奏までふくらませていく","tr":"1942年、ラジオ番組のために短い時間で書き上げられた。もとの歌は南北戦争のころの歌で、映画やCMでもよく使われる","id":"rkJTYA78Q64","len":"4:33","ch":"United States Marine Band"},"anchors":{"c":"ジマーマン","w":"錨を上げて","p":"全曲","pt":"晴れやかで、胸を張って海へ出ていくようなメロディ。アメリカの「海の男」の歌","tr":"アメリカ海軍兵学校の楽隊長ジマーマンが、1906年に陸軍とのフットボールの試合のために書いた。今はアメリカ海軍の歌になっている","id":"nYbV6fJ5DiE","len":"1:44","ch":"United States Navy Band"},"bogey":{"c":"アルフォード","w":"ボギー大佐","p":"全曲","pt":"出だしのメロディの、2音だけ「ターン・タ」と抜ける独特の間（ま）。映画では、この部分を兵士たちが口笛で吹いた","tr":"映画『戦場にかける橋』（1957年）で、捕虜たちが口笛で吹いて世界的に有名になった。題は、ゴルフ場で「ファー！」と叫ぶ代わりに口笛の2音を吹いた軍人がモデルと言われる","id":"UR_iEW3SqBU","len":"3:31","ch":"United States Marine Band"},"crown":{"c":"ウォルトン","w":"戴冠式行進曲「王冠」","p":"全曲","pt":"堂々とした行進のあと、中間部でゆったりと歌う広いメロディ。最後にそのメロディが金管とオルガンのように重く戻ってくる","tr":"1937年、イギリス国王ジョージ6世の戴冠式のために書かれた。もとはオーケストラの曲で、吹奏楽版もよく演奏される","id":"usD7XJcgmRM","len":"8:37","ch":"United States Marine Band"},"dambusters":{"c":"コーツ","w":"ダム・バスターズ・マーチ","p":"全曲","pt":"元気な行進のあと、中間部で胸を張って歌うような大きなメロディが出てくる。イギリスらしい気品のあるマーチ","tr":"1955年のイギリス映画『暁の出撃（ダム・バスターズ）』のために書かれた。コーツはイギリスの軽音楽を代表する作曲家","id":"jyJ_2muhKzQ","len":"3:41","ch":"United States Air Force Band - Topic"},"seasongs":{"c":"ヴォーン・ウィリアムズ","w":"海の歌","p":"全曲","pt":"イギリスの船乗りの歌が3つ、次々につながって出てくる。中間部は少しゆったりと、懐かしい歌になる","tr":"1924年、イギリスの帝国博覧会のために書かれた。のちに作曲者自身がオーケストラ版も作った。3分ほどの短いマーチ","id":"S8qoOMyg5_0","len":"4:02","ch":"North Texas Wind Symphony - Topic"},"kameraden":{"c":"タイケ","w":"旧友","p":"全曲","pt":"ドイツの行進曲らしい、がっしりとした足どり。低音が刻むリズムに乗って、明るいメロディがのびのびと歌う","tr":"作曲者タイケは兵士として軍楽隊にいたころにこの曲を書いた。ドイツでもっとも有名な行進曲のひとつで、日本の吹奏楽部でも定番","id":"EKp_UOmNxA4","len":"4:22","ch":"Record Music Group"},"doppeladler":{"c":"J.F.ワーグナー","w":"双頭の鷲の旗の下に","p":"全曲","pt":"中間部で、低音の楽器（チューバやバリトン）が主役になってメロディを吹く。低音がこんなに目立つマーチはめずらしい","tr":"「双頭の鷲」は、オーストリア＝ハンガリー帝国の紋章。作曲者はオペラのワーグナーとは別人で、「オーストリアのマーチ王」と呼ばれた","id":"uGAlLbj6z2A","len":"3:47","ch":"SHOBI NETTV"},"florentiner":{"c":"フチーク","w":"フローレンティナー行進曲","p":"全曲","pt":"中間部で、ピッコロが高い音でくるくると回るソロを吹く。イタリアの陽気な街の空気がつまったマーチ","tr":"フチークはチェコの作曲家で軍楽隊長。題は「フィレンツェの人」という意味で、イタリアへのあこがれを込めて書いた","id":"CsVm7493VsY","len":"6:38","ch":"Tokyo Kosei Wind Orchestra"},"gladiators":{"c":"フチーク","w":"剣闘士の入場","p":"全曲","pt":"半音ずつ上がったり下がったりする、くねくねしたメロディ。だれもが一度は聞いたことのある「サーカスの曲」","tr":"もとは古代ローマの剣闘士を描いた勇ましい行進曲。のちにアメリカのサーカスでピエロの登場に使われ、「サーカスの曲」として世界中に広まった","id":"r0105ht0yoc","len":"3:00","ch":"United States Marine Band"},"preussens":{"c":"ピーフケ","w":"プロイセンの栄光","p":"全曲","pt":"太鼓の打ちこみから始まる、堂々として格調の高い行進。ドイツの軍楽隊らしい重厚な響き","tr":"作曲者ピーフケはプロイセン（今のドイツ北部）の軍楽隊長。1871年、普仏戦争の勝利を祝う凱旋のために書かれたと伝えられる","id":"jt_d0pSfFZQ","len":"2:13","ch":"Musikkorps der Bundeswehr - UK e.V."},"sambre":{"c":"プランケット","w":"サンブル・エ・ミューズ連隊","p":"全曲","pt":"ラッパのファンファーレのあと、力強い歌が行進曲になって進む。フランスの軍楽隊のまばゆい響き","tr":"フランス革命のころに戦った連隊をたたえる歌が、行進曲として広まった。フランスの軍隊でもっとも有名な行進曲のひとつ","id":"iV1G87NGkGk","len":"4:28","ch":"Royal Swedish Airforce Band - Topic"},"arsenal":{"c":"ヴァンデルロースト","w":"アルセナール","p":"全曲","pt":"はじけるようなファンファーレで始まり、中間部では一転して、ゆったりと広がる美しいメロディを歌う","tr":"ベルギーの作曲家ヴァンデルローストの行進曲。日本の吹奏楽部でとても人気があり、演奏会やコンクールで何度も取り上げられている","id":"kEmsoRxKk7w","len":"3:48","ch":"近畿大学吹奏楽部"},"gunkan":{"c":"瀬戸口藤吉","w":"軍艦行進曲","p":"全曲","pt":"「守るも攻むるも…」で知られる力強いメロディ。中間部では『海ゆかば』のメロディがゆっくりと引用される","tr":"明治時代に作られた日本を代表する行進曲で、今も海上自衛隊の公式の行進曲。パチンコ店でよく流れていたことでも知られる","id":"s6ZrQ73zxdw","len":"3:53","ch":"防衛省 海上自衛隊 公式チャンネル"},"olympic":{"c":"古関裕而","w":"オリンピック・マーチ","p":"全曲","pt":"明るく晴れやかな行進のおしまいに、「君が代」の一節がさりげなく顔を出す。最後の部分をよく聴いてみて","tr":"1964年の東京オリンピック開会式で、選手入場の行進に使われた。古関裕而は朝ドラ『エール』の主人公のモデルになった作曲家","id":"conWrTAVa88","len":"5:33","ch":"WORLD NIPPON"},"sportsshow":{"c":"古関裕而","w":"スポーツショー行進曲","p":"全曲","pt":"出だしのファンファーレだけで「スポーツ中継が始まる！」とわかる、晴れやかなマーチ","tr":"NHKのスポーツ中継のテーマ音楽として、長く使われてきた。古関裕而は、甲子園の大会歌『栄冠は君に輝く』も作った","id":"2MFC6APp_ZI","len":"3:19","ch":"Columbia Wind Orchestra - Topic"},"shukuten":{"c":"團伊玖磨","w":"祝典行進曲","p":"全曲","pt":"華やかなファンファーレのあと、中間部で日本らしいおだやかな歌がゆったりと流れる","tr":"1959年、皇太子（今の上皇さま）のご結婚を祝って作られた。今も日本の式典でよく演奏される","id":"l14nOnFz9iU","len":"6:06","ch":"洗足学園音楽大学/SENZOKU GAKUEN college of Music"},"akizorani":{"c":"上岡洋一","w":"行進曲「秋空に」","p":"全曲","pt":"すみきった秋の空のように、明るくすっきりしたメロディ。2分あまりの短さに、マーチの楽しさがぎゅっとつまっている","tr":"短くて覚えやすく、学校の吹奏楽部から自衛隊・海上保安庁の音楽隊まで、日本中で演奏されている","id":"vfmJ4ZwJXd0","len":"3:14","ch":"海上保安庁"},"takeoff":{"c":"建部知弘","w":"コンサート・マーチ「テイク・オフ」","p":"全曲","pt":"飛行機が滑走路から飛び立つような、勢いのある出だし。のびやかに高く上がっていくメロディが気持ちいい","tr":"1986年度の全日本吹奏楽コンクール課題曲。のちに続編「テイク・オフII」も作られた","id":"JrX-2Xo2LM8","len":"3:48","ch":"The Japan Ground Self-Defense Force Central Band - Topic"},"kten":{"c":"高橋伸哉","w":"行進曲「K点を越えて」","p":"全曲","pt":"スキーのジャンプ台から飛び出すような、軽やかで勢いのあるマーチ","tr":"1999年度の全日本吹奏楽コンクール課題曲。題の「K点」はスキージャンプの目標の距離のこと。前の年の長野オリンピックでは、日本のジャンプ陣が大活躍した","id":"bj-tshoDTto","len":"2:51","ch":"KBBTBcouncil"},"haruka":{"c":"南俊明","w":"マーチ「春風」","p":"全曲","pt":"春の風がふきぬけるような、さわやかでやさしいマーチ","tr":"2005年度の全日本吹奏楽コンクール課題曲。動画の再生回数が多い、課題曲マーチの人気曲","id":"NoGeXSeA3jE","len":"3:15","ch":"KBBTBcouncil"},"kibou":{"c":"和田信","w":"行進曲「希望の空」","p":"全曲","pt":"まっすぐで力強いメロディが、空へ向かって伸びていく。歯切れのよい、正統派のマーチ","tr":"2012年度の全日本吹奏楽コンクール課題曲。課題曲マーチの中でも人気が高く、演奏会でもよく取り上げられる","id":"ynctEJM7zvI","len":"3:15","ch":"SlapSlepSlipS"},"aprilleaf":{"c":"近藤悠介","w":"マーチ「エイプリル・リーフ」","p":"全曲","pt":"4月の若葉のように、みずみずしくてはずむようなメロディ。中間部のやわらかい歌も美しい","tr":"2019年度の全日本吹奏楽コンクール課題曲。動画の再生回数がとても多い、近年の人気曲","id":"zndbC6irJ_c","len":"3:33","ch":"WISH Wind Orchestra"},"bluespring":{"c":"鈴木雅史","w":"マーチ「ブルー・スプリング」","p":"全曲","pt":"「青春」を英語にした題のとおり、まぶしくて少し切ない、若々しいマーチ","tr":"2022年度の全日本吹奏楽コンクール課題曲。動画の再生回数がとても多い、近年の人気曲","id":"Wls_whoi_JA","len":"3:57","ch":"WISH Wind Orchestra"},"raiders":{"c":"ジョン・ウィリアムズ","w":"レイダース・マーチ","p":"全曲","pt":"トランペットが吹く「タタタター、タタター」の冒険のテーマ。中間部ではロマンチックな愛のテーマに変わる","tr":"映画『レイダース／失われたアーク』（1981年）の音楽。ウィリアムズが2つのメロディを作ってスピルバーグ監督に聴かせたら両方気に入られ、2つを組み合わせてこのマーチにしたと語っている","id":"vkMrSLF2jhQ","len":"5:28","ch":"United States Coast Guard Band"},"imperial":{"c":"ジョン・ウィリアムズ","w":"帝国のマーチ","p":"全曲","pt":"低音の金管が「ダーン、ダーン、ダーン」と重く刻む、悪の帝国の行進。ダース・ベイダーの登場を告げる音楽","tr":"映画『スター・ウォーズ／帝国の逆襲』（1980年）で初めて登場した。「ダース・ベイダーのテーマ」とも呼ばれる","id":"SEfS9XSdAzs","len":"3:37","ch":"The University of Texas Bands"},"greatescape":{"c":"エルマー・バーンスタイン","w":"大脱走マーチ","p":"全曲","pt":"口笛でも吹けそうな、とぼけた明るいメロディ。捕虜たちの脱走計画を描いた映画とは思えない陽気さ","tr":"1963年の映画『大脱走』のテーマ曲。作曲者は『ウエスト・サイド物語』のバーンスタインとは別人","id":"eYYNvJPmCmE","len":"2:18","ch":"【公式】東京マロニエ吹奏楽団"},"granpartita":{"c":"モーツァルト","w":"セレナード第10番「グラン・パルティータ」","p":"第3楽章（アダージョ）","pt":"低音が静かに刻む上で、オーボエ、クラリネット、バセットホルン（クラリネットの仲間）が1本ずつ入ってきて、天国のような歌をつないでいく","tr":"13人の管楽器（とコントラバス）のための曲。映画『アマデウス』で、ライバルのサリエリがこの楽章を聴いて「神の声だ」と打ちのめされる場面が有名","id":"NecLh4YOT9M","len":"5:56","ch":"London Symphony Orchestra"},"fireworks":{"c":"ヘンデル","w":"王宮の花火の音楽","p":"序曲（動画は全曲。はじめの約8分）","pt":"トランペットとホルンの輝かしい響き。もともと管楽器と打楽器だけで鳴らす、野外用の音楽","tr":"1749年、ロンドンの公園での花火大会のために書かれた。国王の希望で、はじめは弦楽器なしの管楽器の大編成。公開リハーサルには1万2千人が集まったと伝えられる","id":"EkttBYzD-jY","len":"19:17","ch":"The English Concert"},"dvserenade":{"c":"ドヴォルザーク","w":"管楽セレナード ニ短調","p":"第1楽章（動画は全曲。はじめの約4分）","pt":"オーボエやホルンが、のんびりとした行進のようなメロディを吹く。ボヘミアの村の楽隊のような、素朴で温かい響き","tr":"管楽器にチェロとコントラバスを加えた編成。ドヴォルザークは昔の貴族の館で演奏された管楽合奏のスタイルを、わざと懐かしく再現した","id":"st6vwMhukSc","len":"27:39","ch":"hr-Sinfonieorchester – Frankfurt Radio Symphony"},"rsserenade":{"c":"R.シュトラウス","w":"13管楽器のためのセレナード","p":"全曲","pt":"若々しく、とろけるように甘い管楽器の和音。ホルン4本の柔らかい響きがとくに美しい","tr":"作曲者が17歳のころの作品。のちに大作曲家となるシュトラウスの名前を最初に世に知らせた曲のひとつ","id":"0KdoD6Zow74","len":"9:52","ch":"hr-Sinfonieorchester – Frankfurt Radio Symphony"},"gounod":{"c":"グノー","w":"小交響曲","p":"第1楽章（動画は全曲。はじめから）","pt":"フルートがおしゃべりするように歌い、クラリネットやホルンが優しく応える。サロンで聴くような上品な音楽","tr":"オペラ『ファウスト』で知られるグノーが、晩年に管楽器9人のために書いた。フルートが1本なのは、初演したフルート奏者タファネルのため","id":"HFLaYc2_wKc","len":"20:09","ch":"Camerata Pacifica"},"berlioz":{"c":"ベルリオーズ","w":"葬送と勝利の大交響曲","p":"第3楽章（アポテオーズ）","pt":"大編成の吹奏楽が、勝利をたたえて高らかに鳴りひびく。最後は合唱が加わる版もある","tr":"1840年、フランス7月革命の記念行事のために、屋外で行進しながら演奏する大吹奏楽のために書かれた。吹奏楽のための交響曲の大先輩","id":"rlcorn-Yv3I","len":"9:01","ch":"United States Marine Band"},"holst1":{"c":"ホルスト","w":"吹奏楽のための第1組曲","p":"第1曲 シャコンヌ","pt":"低音だけで静かに吹かれた8小節のメロディが、何度もくり返されながら、楽器が増えて大きくふくらんでいく","tr":"1909年に書かれ、吹奏楽のための本格的な芸術作品の「はじまりの1曲」と言われる。『惑星』のホルストが作曲した。吹奏楽をやった人なら一度は演奏する曲","id":"H-TPBH_dFj0","len":"4:52","ch":"United States Marine Band"},"holst2":{"c":"ホルスト","w":"吹奏楽のための第2組曲","p":"第4曲 ダーガソンによる幻想曲","pt":"イギリスの古い踊りの曲「ダーガソン」が休みなく回り続け、その上に『グリーンスリーヴス』のメロディが重なる","tr":"ホルストはイギリスの民謡をたくさん集めて使った。のちに同じ曲を弦楽合奏用に書き直して『セントポール組曲』に入れている","id":"opG2psvyAB4","len":"3:12","ch":"North Texas Wind Symphony - Topic"},"folksong":{"c":"ヴォーン・ウィリアムズ","w":"イギリス民謡組曲","p":"第1曲 行進曲「日曜日には17歳」（動画は全曲。はじめの約3分）","pt":"イギリスの民謡が次々に出てくる、陽気な行進曲。民謡の素朴さと吹奏楽のにぎやかさがぴったり合う","tr":"1923年、軍楽隊のために書かれた。のちにオーケストラ用にも編曲され、イギリスの音楽の教科書のような曲になっている","id":"IcimP7pcd6o","len":"11:45","ch":"United States Marine Band"},"toccata":{"c":"ヴォーン・ウィリアムズ","w":"トッカータ・マルツィアーレ","p":"全曲","pt":"「マルツィアーレ」は「軍隊風に」。短いフレーズを楽器から楽器へ受けわたしながら、勢いよく突き進む","tr":"1924年、イギリスの帝国博覧会のために書かれた。『イギリス民謡組曲』『海の歌』と並ぶ、作曲者の3つの吹奏楽曲のひとつ","id":"CJlEcNQl9K4","len":"5:07","ch":"United States Marine Band"},"lincoln":{"c":"グレインジャー","w":"リンカンシャーの花束","p":"第1曲「リスボン」（動画は全曲。はじめの約1分半）","pt":"船乗りの歌を、楽器がかわるがわる受けつぐ。1分半ほどで6曲のうちの1曲目が終わる","tr":"作曲者グレインジャーが、イギリス東部のリンカンシャーで村の老人たちが歌う民謡を録音して集め、歌い手ひとりひとりの個性を音にした。全6曲で約15分","id":"-mwe4E0dJZE","len":"15:20","ch":"United States Navy Band"},"irish":{"c":"グレインジャー","w":"アイルランド民謡「デリー地方の歌」","p":"全曲","pt":"「ダニー・ボーイ」として知られるメロディを、ゆったりと深い響きで歌いあげる","tr":"このメロディはアイルランドの古い民謡で、のちに歌詞がついて「ダニー・ボーイ」として世界中で歌われるようになった","id":"kWsXMLnsfE4","len":"4:26","ch":"United States Marine Band"},"shepherd":{"c":"グレインジャー","w":"シェパーズ・ヘイ","p":"全曲","pt":"イギリスの村の踊り（モリス・ダンス）の曲が、楽器を替えながらぐるぐる回る。2分あまりのにぎやかな踊り","tr":"「モリス・ダンス」は、鈴をつけた男たちがハンカチや棒を持って踊るイギリスの伝統の踊り。グレインジャーは民謡や民族舞踊の曲を生き生きと編曲した","id":"t39GPkhY4y8","len":"2:25","ch":"United States Marine Band"},"hammersmith":{"c":"ホルスト","w":"ハマースミス","p":"全曲","pt":"静かなテムズ川の流れと、にぎやかな下町の市場。2つの世界が重なり合う、ホルスト晩年の深い音楽","tr":"ロンドンのハマースミス地区は、ホルストが長く暮らし、教えた場所。BBCの依頼で書かれた、吹奏楽のための本格的な交響詩","id":"6osFgS_gDrs","len":"13:29","ch":"United States Marine Band"},"schoenberg":{"c":"シェーンベルク","w":"主題と変奏 作品43a","p":"全曲","pt":"はじめの主題が、7つの変奏で表情を変えていく。むずかしい現代音楽で知られるシェーンベルクの、意外なほど聴きやすい曲","tr":"アメリカに亡命したシェーンベルクが、学校のバンドのために書いた。ただし難しすぎて、学校では演奏できなかったと言われる","id":"GyRdCd598Z0","len":"11:46","ch":"United States Marine Band"},"milhaud":{"c":"ミヨー","w":"フランス組曲","p":"第5曲 プロヴァンス","pt":"南フランスの太陽のような、明るく軽やかな踊り。民謡がはずむように歌われる","tr":"1944年、アメリカの学校のバンドのために書かれた。フランスの5つの地方の民謡を使い、戦争で戦うアメリカの若者たちに、解放されたフランスの土地を知ってもらう願いをこめた","id":"_26KuztLRRo","len":"3:13","ch":"United States Marine Band"},"hindemith":{"c":"ヒンデミット","w":"吹奏楽のための交響曲 変ロ調","p":"第1楽章（動画は全曲。はじめの約6分）","pt":"金管の力強い響きと、木管の細かい動き。かっちりと組み立てられた、吹奏楽の本格的な交響曲","tr":"1951年、アメリカ陸軍のバンドのために書かれた。吹奏楽のための交響曲が「芸術作品」として認められるきっかけになった1曲","id":"pvVgCoORNHM","len":"19:03","ch":"umsymphonyband"},"armenian":{"c":"リード","w":"アルメニアン・ダンス パート1","p":"全曲","pt":"アルメニアの民謡が5つつながる。最後の「ゴー、ゴー」は、はやしたてるような速い踊りで最高潮に","tr":"アルフレッド・リードは日本でとくに人気のある作曲家で、何度も来日して日本の楽団を指揮した。アルメニアの民謡学者コミタスが集めた歌を使っている","id":"ux6HdrDov0M","len":"11:39","ch":"avex PRcast"},"elcamino":{"c":"リード","w":"エル・カミーノ・レアル","p":"全曲","pt":"スペインのカスタネットや手拍子が聞こえてきそうな、情熱的な踊り。中間部のゆっくりした歌は哀愁たっぷり","tr":"題は「王の道」という意味のスペイン語で、カリフォルニアに実在する古い街道の名前。スペインの踊りのリズムで書かれている","id":"zjn_ZidN42U","len":"10:04","ch":"Senzoku Gakuen Symphonic Wind Orchestra - Topic"},"russianxmas":{"c":"リード","w":"ロシアのクリスマス音楽","p":"全曲","pt":"ロシア正教会の聖歌が、鐘の音とともに静かに始まり、最後は大きな教会全体が鳴るような大音響へ","tr":"1944年、第二次世界大戦中のアメリカとソ連の友好を祝う演奏会のために、短い期間で書かれた。ロシアの古いクリスマスの歌が使われている","id":"HfOiKknS-Wc","len":"15:04","ch":"New York Wind Symphony"},"festprelude":{"c":"リード","w":"フェスティバル・プレリュード","p":"全曲","pt":"ファンファーレのくり返しが少しずつ大きくなり、最後は全員の大合奏で華やかに終わる","tr":"式典や演奏会の幕開けによく使われる曲。短い時間で吹奏楽のきらびやかさをたっぷり味わえる","id":"UimxwU3UO-E","len":"4:52","ch":"Tokyo Kosei Wind Orchestra"},"alvamar":{"c":"バーンズ","w":"アルヴァマー序曲","p":"全曲","pt":"元気に走り出す出だし、中間部のゆったりしたメロディ、また元気に戻って締めくくる。わかりやすい3つの部分","tr":"アメリカの作曲家バーンズの出世作。題の「アルヴァマー」は、バーンズが暮らしたカンザス州ローレンスのゴルフクラブの名前と言われる","id":"WU04r2uCQtg","len":"8:30","ch":"Tokyo Kosei Wind Orchestra"},"barnes3":{"c":"バーンズ","w":"交響曲第3番","p":"第3楽章（メスト）","pt":"胸がしめつけられるように美しい、ゆったりとした歌。静かに始まり、大きくふくらんで、また静かに消えていく","tr":"バーンズが幼い娘を亡くした悲しみの中で書いた交響曲。この楽章は亡き娘ナタリーにささげられている","id":"UebesC4Z1Qc","len":"13:13","ch":"The United States Air Force Band - Topic"},"festvar":{"c":"クロード・T・スミス","w":"フェスティヴァル・ヴァリエーションズ","p":"全曲","pt":"冒頭、ホルンがとても高い音で吹く主題。全員が超絶技巧を求められる、スリリングな曲","tr":"アメリカ空軍のバンドのために書かれた。演奏するのがとても難しく、腕のある楽団の「力試し」の曲として知られている","id":"ZEOlIPXLlGM","len":"10:17","ch":"Tokyo Kosei Wind Orchestra"},"eternal":{"c":"クロード・T・スミス","w":"永遠の父なる神よ","p":"全曲","pt":"海の安全を祈る賛美歌が、嵐の場面をくぐり抜けて、最後は堂々と歌われる","tr":"もとの賛美歌は「海で危険にあう人々のために」という祈りの歌で、海軍の歌として知られる。スミスはこの歌をもとに、荒れる海の情景を描いた","id":"IDa3oxusvts","len":"6:54","ch":"Navy Band - Topic"},"shenandoah":{"c":"ティケリ","w":"シェナンドー","p":"全曲","pt":"アメリカの古い民謡「シェナンドー」を、静かで透きとおった響きで歌う。そっと耳をすませたい曲","tr":"シェナンドーはアメリカ東部を流れる川の名前。ティケリは今のアメリカを代表する吹奏楽の作曲家で、学校のバンドのための名曲を数多く書いている","id":"rUKbPO5Nwm4","len":"5:44","ch":"The United States Air Force Band"},"hymnsong":{"c":"ホルシンガー","w":"ある賛美歌による","p":"全曲","pt":"「やすけさは川のごとく」という賛美歌を、ゆっくりと温かく歌う。泣ける吹奏楽曲として名高い","tr":"作曲者ホルシンガーが、勤めていた教会の牧師が教会を去るときに、お別れの贈り物として書いた曲と伝えられる","id":"M9FW0yEHcYw","len":"5:10","ch":"Band of the U.S. Air Force Reserve - Topic"},"korean":{"c":"チャンス","w":"朝鮮民謡の主題による変奏曲","p":"全曲","pt":"朝鮮半島の民謡が、静かに始まり、いくつもの変奏で姿を変えていく","tr":"作曲者チャンスは、兵士として韓国にいたときにこの民謡を知った。アメリカの学校のバンドで今もよく演奏される","id":"zFMgBp_QR5s","len":"7:17","ch":"The United States Air Force Band"},"october":{"c":"ウィテカー","w":"オクトーバー","p":"全曲","pt":"秋の夕暮れのような、やわらかく包みこむ和音。静かに始まり、大きくふくらんでまた静まる","tr":"ウィテカーは合唱曲でも人気の作曲家。「10月がいちばん好きな月」という作曲者が、秋の空気をそのまま音にした","id":"jg4JF8ry-u0","len":"6:48","ch":"The United States Air Force Band"},"ride":{"c":"ヘイゾ","w":"ライド","p":"全曲","pt":"車を飛ばすような、スピード感あふれる4分間。最初から最後まで休まず駆け抜ける","tr":"作曲者ヘイゾが、知人の車で夕暮れの道をドライブしたときの気分を曲にしたと伝えられる","id":"blx0KklwsJ0","len":"4:09","ch":"First Coast Wind Symphony"},"blueshades":{"c":"ティケリ","w":"ブルー・シェイズ","p":"全曲","pt":"ジャズの「ブルース」の色あいを使った曲。クラリネットがジャズ風に大活躍する場面がある","tr":"1930年代のジャズ（ビッグバンド）へのあこがれを込めて書かれた。クラシックの吹奏楽とジャズの間を行き来する楽しい曲","id":"ZNUui99aSNc","len":"10:21","ch":"North Texas Wind Symphony - Topic"},"candide":{"c":"バーンスタイン","w":"キャンディード序曲","p":"全曲","pt":"はじけるように速いファンファーレ、ころころ笑うようなメロディ、最後はたたみかけるように終わる。4分間のジェットコースター","tr":"ミュージカル『キャンディード』（1956年）の序曲。『ウエスト・サイド物語』のバーンスタインの曲で、オーケストラでも吹奏楽でも人気","id":"XVq4q2l4PMU","len":"4:54","ch":"United States Marine Band"},"dragon":{"c":"スパーク","w":"ドラゴンの年","p":"第3曲 フィナーレ（動画は全曲。おわりの約5分）","pt":"速いテンポで突き進み、金管が全力でとどろく。息もつかせぬ迫力のフィナーレ","tr":"イギリスの作曲家スパークが、ウェールズ（赤いドラゴンが旗に描かれている）の金管バンドのために書いた。のちに吹奏楽版も作られた","id":"vg4AqN7W-Wc","len":"13:58","ch":"Ryukoku University Symphonic Band"},"dancemov":{"c":"スパーク","w":"ダンス・ムーヴメンツ","p":"全曲","pt":"4つの楽章がそれぞれ別の踊り。木管だけの楽章、金管だけの楽章があり、吹奏楽の楽器の色をじっくり聴きくらべられる","tr":"アメリカ空軍のバンドのために書かれた。スパークの吹奏楽の代表作のひとつ","id":"aLQ9iDHW_64","len":"19:54","ch":"Ryukoku University Symphonic Band"},"lotr":{"c":"デ・メイ","w":"交響曲第1番「指輪物語」","p":"第1楽章「ガンダルフ」","pt":"魔法使いガンダルフの、堂々とした主題。途中で、愛馬シャドウファックスが駆けぬける速い場面に変わる","tr":"オランダの作曲家デ・メイが、トールキンの小説『指輪物語』をもとに書いた。映画版より前の1988年に完成した、吹奏楽の交響曲の人気作","id":"9MAf3K0SYfs","len":"6:40","ch":"United States Marine Band"},"oregon":{"c":"デ・ハーン","w":"オレゴン","p":"全曲","pt":"走り出したら止まらないリズムに、雄大な大地を思わせるメロディが乗る。旅の高揚感がいっぱい","tr":"オランダの作曲家デ・ハーンの代表作。アメリカ西部オレゴンの大自然と、そこへ向かう開拓の旅を描いている","id":"to3gePlszMY","len":"9:13","ch":"Hal Leonard Europe Concert Band"},"spartacus":{"c":"ヴァンデルロースト","w":"スパルタクス","p":"全曲","pt":"奴隷の反乱を描く、はげしく荒々しい音楽。中間部の静かな祈りのような歌との対比が見事","tr":"古代ローマで奴隷たちを率いて反乱を起こした剣闘士スパルタクスの物語。日本のコンクールで人気の高い曲","id":"sFFkgl1738I","len":"14:31","ch":"Jan Van der Roost - Topic"},"harrison":{"c":"グレイアム","w":"ハリソンの夢","p":"全曲","pt":"大海原と、正確な時計を作ろうと闘う職人。波の荒々しさと、時計の「カチカチ」という刻みが聞こえてくる","tr":"18世紀のイギリスの時計職人ジョン・ハリソンの物語。海の上で船の位置を知るために、ゆれる船でも狂わない時計を一生かけて作った人","id":"eysU5ScLhfk","len":"13:36","ch":"The United States Air Force Band - Topic"},"fumon":{"c":"保科洋","w":"風紋","p":"全曲","pt":"風が砂に描く模様のように、ゆるやかに形を変えていくメロディ。静かな部分の美しさが格別","tr":"1987年度の全日本吹奏楽コンクール課題曲。課題曲の中でも名曲中の名曲と言われ、何十年たっても演奏され続けている","id":"o8uecF45aC4","len":"5:08","ch":"KBBTBcouncil"},"kazenomai":{"c":"福田洋介","w":"吹奏楽のための「風之舞」","p":"全曲","pt":"笛や太鼓のお囃子を思わせる、日本の祭りの風。舞いあがるような勢いと、しっとりした歌が交互に来る","tr":"2004年度の全日本吹奏楽コンクール課題曲。課題曲の中でも特に人気が高く、今も演奏会でよく取り上げられる","id":"pmO9oeiRYI8","len":"5:12","ch":"KBBTBcouncil"},"passacaglia":{"c":"兼田敏","w":"シンフォニック・バンドのためのパッサカリア","p":"全曲","pt":"低音がくり返す短いメロディの上で、ほかの楽器が少しずつ重なり、大きなうねりになっていく","tr":"「パッサカリア」は、低音が同じメロディをくり返すバロック時代の形式。日本人の作曲家による吹奏楽の古典として、長く愛されている","id":"zfXNZRxTKuA","len":"6:13","ch":"Tokyo Kosei Wind Orchestra"},"osaka":{"c":"大栗裕","w":"大阪俗謡による幻想曲","p":"全曲","pt":"大阪の天神祭のお囃子やわらべうたが、吹奏楽で生き生きとよみがえる。お祭りの熱気がそのまま伝わってくる","tr":"作曲者大栗裕は大阪の生まれで、ホルン奏者でもあった。はじめはオーケストラ曲として書かれ、のちに作曲者自身が吹奏楽版を作った","id":"zWqceXNU9o8","len":"12:07","ch":"Osakan Philharmonic Winds"},"shinwa":{"c":"大栗裕","w":"吹奏楽のための神話","p":"全曲","pt":"天照大神（あまてらすおおみかみ）が岩屋に隠れ、神々が踊ってさそい出す。最後の踊りの場面は、太鼓が鳴りひびく大騒ぎ","tr":"日本の神話「天の岩屋戸」の物語を描いた曲。日本の吹奏楽の名曲として、コンクールでくり返し演奏されてきた","id":"pHu8CDBd_0A","len":"13:59","ch":"Tokyo Kosei Wind Orchestra"},"gururi":{"c":"伊藤康英","w":"吹奏楽のための交響詩「ぐるりよざ」","p":"第3楽章 祭り（動画は全曲。おわりの約8分）","pt":"長崎のお祭り「龍踊り（じゃおどり）」のにぎやかな囃子が、最後に大爆発する","tr":"題の「ぐるりよざ」は、長崎の隠れキリシタンが伝えた祈りの歌の言葉。ラテン語の「グロリオーザ（栄光ある方）」がなまったもの","id":"bZhhf6Y3Hh4","len":"20:19","ch":"陸上自衛隊中央音楽隊公式"},"tanabata":{"c":"酒井格","w":"たなばた","p":"全曲","pt":"夜空いっぱいに広がるような、甘くてまっすぐなメロディ。織姫と彦星の出会いを思わせる","tr":"作曲者酒井格が学生時代に書いた曲。演奏会やコンクールでとても人気があり、YouTubeでも再生回数の多い吹奏楽曲のひとつ","id":"uzMyJ3W1t9g","len":"8:20","ch":"Osakan Philharmonic Winds"},"japonisme":{"c":"真島俊夫","w":"三つのジャポニスム","p":"第3曲「祭り」（動画は全曲。おわりの約6分）","pt":"日本の祭りの太鼓と笛を思わせる、はげしく熱い音楽。最後は大きく盛り上がる","tr":"全3曲で、「鶴が舞う」「雪の川」「祭り」と日本の情景を描く。真島俊夫は『宝島』などポップスの吹奏楽編曲でも大人気の作曲家","id":"P1_RDbDJc-k","len":"19:28","ch":"洗足学園音楽大学/SENZOKU GAKUEN college of Music"},"kushinada":{"c":"樽屋雅徳","w":"斐伊川に流るるクシナダ姫の涙","p":"全曲","pt":"やまたのおろちに差し出されようとする姫の悲しみと、スサノオの闘い。ドラマのような展開","tr":"出雲（島根県）の神話がもと。樽屋雅徳は物語を描く吹奏楽曲で人気の作曲家で、学校の吹奏楽部でよく取り上げられている","id":"HE0Bs1V5NVo","len":"10:09","ch":"防衛省 海上自衛隊 公式チャンネル"},"discokid":{"c":"東海林修","w":"ディスコ・キッド","p":"全曲","pt":"ディスコのリズムに乗って、金管とサックスが思いきりはじける。コンクールの課題曲とは思えないポップさ","tr":"1977年度の全日本吹奏楽コンクール課題曲。課題曲にポップスが選ばれたのは当時画期的で、今も演奏会の定番になっている","id":"poCT9CpvPSg","len":"3:45","ch":"Tokyo Kosei Wind Orchestra"},"takarajima":{"c":"和泉宏隆（真島俊夫 編曲）","w":"宝島","p":"全曲","pt":"明るいサンバのリズムに乗って、サックスやトランペットが気持ちよく歌う。後半の大盛り上がりも楽しい","tr":"もとはフュージョンバンド「T-SQUARE」の曲。真島俊夫の吹奏楽編曲で大人気になり、「吹奏楽のポップスといえばこれ」と言われるほどの定番に","id":"jYLhYVStJd4","len":"6:19","ch":"洗足学園音楽大学/SENZOKU GAKUEN college of Music"},"african":{"c":"ヴァン・マッコイ","w":"アフリカン・シンフォニー","p":"全曲","pt":"太鼓が鳴り、金管が「パーパーパー」と大きく吹く。高校野球の応援でおなじみ","tr":"もとは1970年代のアメリカのディスコ音楽。吹奏楽に編曲されて、甲子園の応援の定番曲になった","id":"EeZPz_rSD_4","len":"4:35","ch":"avex PRcast"},"cumbanchero":{"c":"ラファエル・エルナンデス","w":"エル・クンバンチェロ","p":"全曲","pt":"打楽器のラテンのリズムが止まらない。トランペットが高い音で吹きまくる、熱い3分間","tr":"プエルトリコの作曲家の曲。日本の吹奏楽では、高校野球の応援や、演奏会のアンコールでおなじみ","id":"KLnqbNsSC9c","len":"4:08","ch":"Tokyo Kosei Wind Orchestra"},"singsing":{"c":"ルイ・プリマ","w":"シング・シング・シング","p":"全曲","pt":"ドラムの「ドンドコドンドコ」に乗って、サックスやトランペットが次々にソロをとる","tr":"1930年代、ベニー・グッドマン楽団の演奏で大ヒットしたスウィング・ジャズの名曲。映画『スウィングガールズ』でも演奏された","id":"DPAKtukM7JI","len":"5:26","ch":"Tokyo Kosei Wind Orchestra"},"lupin":{"c":"大野雄二","w":"ルパン三世のテーマ","p":"全曲","pt":"おなじみの「ルパン、ルパーン」のメロディを、サックスとトランペットがかっこよく決める","tr":"アニメ『ルパン三世』（1977年からの第2シリーズ）の主題曲。ジャズピアニストでもある大野雄二の曲で、吹奏楽やビッグバンドの定番","id":"wZfkUkbsfaQ","len":"3:50","ch":"Tokyo Kosei Wind Orchestra"},"omens":{"c":"和泉宏隆","w":"OMENS OF LOVE","p":"全曲","pt":"胸が高鳴るような、さわやかで切ないメロディ。吹奏楽でサックスやトランペットが歌うと一段とかがやく","tr":"『宝島』と同じT-SQUAREの曲で、吹奏楽版も大人気。演奏会で「宝島」とならぶ定番","id":"89bbL8vPUKc","len":"4:05","ch":"THE ENSEMBLE LIBERTE WIND ORCHESTRA"},"starwars":{"c":"ジョン・ウィリアムズ","w":"スター・ウォーズ メインテーマ","p":"全曲","pt":"トランペットのファンファーレ一発で、宇宙の冒険が始まる。後半のレイア姫のテーマ（ゆったりした歌）も美しい","tr":"映画『スター・ウォーズ』（1977年）の音楽。ウィリアムズは、昔のハリウッドの冒険映画のような、オーケストラが堂々と鳴る音楽をあえて書いた","id":"qWGzOUN1PoQ","len":"5:26","ch":"Ryukoku University Symphonic Band"},"morricone":{"c":"モリコーネ（デ・メイ 編曲）","w":"モリコーネ・メドレー","p":"全曲","pt":"西部劇の口笛、さみしいハーモニカ、そして美しい愛の歌。映画音楽の巨匠の名曲をつないだメドレー","tr":"イタリアの映画音楽の作曲家モリコーネの曲を、『指輪物語』のデ・メイが吹奏楽にまとめた。日本でもとても人気がある","id":"4D5xuGOaCCk","len":"8:41","ch":"Molenaar Edition"},"feste":{"c":"レスピーギ","w":"交響詩「ローマの祭り」","p":"第4曲 主顕祭","pt":"ローマの下町の大騒ぎ。酔っぱらいのトロンボーン、手回しオルガン、歌声が入り乱れ、最後は熱狂のうちに終わる","tr":"もとはオーケストラ曲だが、金管がとても活躍するため、吹奏楽に編曲されてコンクールで何度も演奏されてきた","id":"MP8GonhaegE","len":"5:08","ch":"United States Marine Band"},"daphnis":{"c":"ラヴェル","w":"バレエ「ダフニスとクロエ」","p":"第2組曲（夜明け〜パントマイム〜全員の踊り）","pt":"木管の細かいさざ波の上に、朝日のようなメロディが昇ってくる。最後は全員の熱狂的な踊り","tr":"ラヴェルのバレエ音楽。木管楽器の腕の見せどころが多く、吹奏楽のコンクールで特に人気の高い編曲もの","id":"EWXSs09IZXw","len":"15:01","ch":"Ryukoku University Symphonic Band"},"pini":{"c":"レスピーギ","w":"交響詩「ローマの松」","p":"第4曲 アッピア街道の松","pt":"遠くからだんだん近づいてくる古代ローマの軍隊の行進。最後は全員の大音量で、圧倒的に終わる","tr":"ゆっくり近づく軍隊の足音を、低音と太鼓で表している。金管の別動隊（バンダ）が加わり、聴く人を音で包みこむ","id":"MuWQUwNcQIc","len":"5:22","ch":"United States Marine Band"}},"sections":[{"id":"intro","t":"入門の12曲","lead":"まずはここから。マーチ、吹奏楽のための名曲、ポップスを少しずつ","g":[["",["stars","bogey","kameraden","olympic","holst1","armenian","alvamar","fumon","tanabata","takarajima","raiders","african"]]]},{"id":"march-world","t":"マーチ（世界の行進曲）","lead":"アメリカのマーチ王スーザから、ヨーロッパの軍楽隊、映画のマーチまで","g":[["「マーチ王」スーザ",["stars","washington","liberty","semper","thunderer","capitan"]],["アメリカのマーチ",["emblem","barnum","lassus","anchors","amsalute"]],["イギリスのマーチ",["bogey","crown","dambusters","seasongs"]],["ドイツ・オーストリア・チェコ",["kameraden","doppeladler","preussens","florentiner","gladiators"]],["フランス・ベルギー",["sambre","arsenal"]],["映画のマーチ",["raiders","imperial","greatescape"]]]},{"id":"march-japan","t":"マーチ（日本の行進曲）","lead":"式典やスポーツでおなじみの名曲と、コンクール課題曲のマーチ","g":[["日本の名行進曲",["gunkan","olympic","sportsshow","shukuten","akizorani"]],["コンクール課題曲のマーチ（年の順）",["takeoff","kten","haruka","kibou","aprilleaf","bluespring"]]]},{"id":"roots","t":"吹奏楽のルーツ","lead":"吹奏楽が生まれる前から、管楽器のための名曲があった","g":[["",["fireworks","granpartita","dvserenade","rsserenade","gounod","berlioz"]]]},{"id":"classics","t":"吹奏楽の古典（イギリス・アメリカ）","lead":"「吹奏楽のための芸術作品」のはじまり","g":[["イギリス：ホルストとヴォーン・ウィリアムズ",["holst1","holst2","hammersmith","folksong","toccata"]],["イギリス：グレインジャー",["lincoln","irish","shepherd"]],["アメリカで生まれた古典",["schoenberg","milhaud","hindemith"]]]},{"id":"modern","t":"現代の名曲（アメリカ・ヨーロッパ）","lead":"日本の吹奏楽部でもおなじみの作曲家たち","g":[["アルフレッド・リード",["armenian","elcamino","russianxmas","festprelude"]],["ジェイムズ・バーンズ",["alvamar","barnes3"]],["アメリカの名曲",["festvar","eternal","korean","hymnsong","shenandoah","blueshades","october","ride","candide"]],["ヨーロッパの名曲",["dragon","dancemov","harrison","lotr","oregon","spartacus"]]]},{"id":"japan","t":"日本の吹奏楽","lead":"日本の作曲家が書いた名曲。祭りや神話を描いた曲も","g":[["名作の数々",["passacaglia","osaka","shinwa","gururi","japonisme","tanabata","kushinada"]],["コンクール課題曲の名曲",["fumon","kazenomai","discokid"]]]},{"id":"pops","t":"ポップス・映画音楽","lead":"演奏会のアンコールや野球の応援でおなじみ","g":[["ポップス",["takarajima","omens","african","cumbanchero","singsing","discokid","lupin"]],["映画音楽",["starwars","raiders","imperial","morricone"]]]},{"id":"arrange","t":"クラシックの編曲もの","lead":"オーケストラの名曲を吹奏楽で。コンクールの自由曲の定番","g":[["",["feste","pini","daphnis","candide"]]]},{"id":"kadai","t":"全日本吹奏楽コンクールの課題曲","lead":"毎年えらばれる課題曲から、名曲・人気曲（年の順）","g":[["",["shukuten","discokid","takeoff","fumon","kten","kazenomai","haruka","kibou","aprilleaf","bluespring"]]]},{"id":"scenes","t":"「あの曲」の正体","lead":"運動会、野球の応援、テレビ、サーカスで聴いたあの曲","g":[["野球の応援・運動会",["african","cumbanchero","takarajima","lupin","olympic","sportsshow"]],["テレビ・映画・サーカス",["liberty","bogey","gladiators","gunkan","greatescape"]]]},{"id":"instruments","t":"楽器別 この楽器が活躍する曲","lead":"好きな楽器から探す","g":[["ピッコロ",["stars","florentiner"]],["クラリネット",["blueshades","granpartita"]],["サックス",["takarajima","singsing"]],["ホルン",["festvar","rsserenade"]],["トランペット",["raiders","cumbanchero"]],["トロンボーン",["lassus","stars"]],["ユーフォニアム・チューバ（低音）",["doppeladler","emblem"]],["打楽器",["cumbanchero","gururi"]],["鐘（チャイム）",["liberty","russianxmas"]]]}],"about":{"スーザ|星条旗よ永遠なれ":{"y":"1896年作曲・約3〜4分","s":"【どんな曲】アメリカの「マーチ王」スーザの最高傑作で、世界でいちばん有名な行進曲と言ってよい曲です。アメリカの独立記念日などには、必ずといってよいほど演奏されます。\n\n【聴くときのコツ】マーチは「第1マーチ→第2マーチ→トリオ（中間部）」という順に、メロディが入れかわっていきます。トリオで一度おだやかになり、そのあと同じメロディがだんだん豪華になって戻ってくるのを追いかけてみてください。"},"スーザ|ワシントン・ポスト":{"y":"1889年作曲・約2〜3分","s":"【どんな曲】新聞社の名前がついた、スーザの初期の大ヒット曲です。8分の6拍子（1拍が「タッタ」と3つに分かれる）の軽やかなマーチです。\n\n【聴くときのコツ】「イチ・ニ」の行進より「ズンチャッチャ、ズンチャッチャ」と跳ねる感じに注目すると、当時この曲で人々が踊った理由がわかります。"},"スーザ|自由の鐘":{"y":"1893年作曲・約3〜4分","s":"【どんな曲】スーザの代表作のひとつで、鐘（チャイム）の音が入るのが特徴のマーチです。\n\n【聴くときのコツ】トリオ（中間部）に入ってからの鐘に注目。同じメロディが2回目に鳴るとき、鐘が加わって晴れやかになります。"},"スーザ|センパー・フィデリス":{"y":"1888年作曲・約2〜3分","s":"【どんな曲】アメリカ海兵隊の公式行進曲です。スーザは海兵隊バンドの楽長として12年間つとめ、この楽団を一流に育てました。\n\n【聴くときのコツ】中ほどの「太鼓だけ」の部分から、ラッパ風のフレーズが少しずつ大きくなるところは、遠くから行進が近づいてくる様子をイメージすると楽しめます。"},"スーザ|雷神":{"y":"1889年作曲・約3分","s":"【どんな曲】スーザのマーチの中でも演奏される回数の多い、明るく力強い1曲です。\n\n【聴くときのコツ】最後の部分で低音と打楽器が「ドン」と打ちこむ箇所に耳をすませてください。題の「雷」はこの音からイメージするとわかりやすいです。"},"スーザ|エル・カピタン":{"y":"1896年作曲・約2〜3分","s":"【どんな曲】スーザが作った喜歌劇（オペレッタ）の歌をもとにした行進曲です。スーザは作曲家としても指揮者としても大人気で、自分の楽団を率いて世界中を演奏旅行しました。\n\n【聴くときのコツ】途中で拍子が変わり、歩き方が「ゆったり」から「軽快」に切りかわります。その変わり目を見つけてみてください。"},"バグリー|国民の象徴":{"y":"約3分","s":"【どんな曲】アメリカでもっともよく演奏されるマーチのひとつで、軍楽隊やマーチングバンドの定番です。\n\n【聴くときのコツ】最初のマーチ（第1マーチ）の中に、アメリカ国歌の出だしがまぎれこんでいます。国歌を知っていると、思わずにやりとする部分です。"},"キング|バーナムとベイリーのお気に入り":{"y":"1913年作曲・約2〜3分","s":"【どんな曲】サーカスの楽団のために書かれたマーチで、テンポがとても速いのが特徴です。曲芸や動物の出し物を盛り上げるために、サーカスの音楽はふつうのマーチより速く演奏されました。\n\n【聴くときのコツ】低音の楽器が細かく動き回るところを聴くと、演奏のむずかしさと楽しさがよくわかります。"},"フィルモア|トロンボーンの悪ふざけ":{"y":"約3分","s":"【どんな曲】トロンボーンが主役の、ユーモアたっぷりのマーチです。トロンボーンのスライドを動かして音をずり上げる「グリッサンド」が何度も出てきます。\n\n【聴くときのコツ】トロンボーンの「ブワ〜ン」という音が何回出てくるか数えてみると楽しく聴けます。"},"グールド|アメリカン・サリュート":{"y":"1942年作曲・約4〜5分","s":"【どんな曲】アメリカの古い歌「ジョニーが凱旋するとき」を材料にした、変奏曲のような行進曲です。\n\n【聴くときのコツ】同じメロディが、ファゴットのひそひそ声から始まり、楽器を替えながら少しずつ大きくなっていきます。最後の全員での大合奏まで、ふくらみ方を追いかけてみてください。"},"ジマーマン|錨を上げて":{"y":"1906年作曲・約2分","s":"【どんな曲】アメリカ海軍の歌として知られる行進曲です。フットボールの応援歌として生まれ、のちに海軍を代表する歌になりました。\n\n【聴くときのコツ】短い曲なので、メロディを覚えて口ずさめるくらいまで何度か聴いてみてください。"},"アルフォード|ボギー大佐":{"y":"約3〜4分","s":"【どんな曲】イギリスの軍楽隊長アルフォードの代表作で、イギリスの行進曲の中でもっとも有名な曲のひとつです。作曲者名「アルフォード」はペンネームです。\n\n【聴くときのコツ】出だしのメロディの、ふっと音が抜ける「間（ま）」が特徴です。映画ではここを兵士たちが口笛で吹きました。"},"ウォルトン|戴冠式行進曲「王冠」":{"y":"1937年作曲・約8〜10分","s":"【どんな曲】イギリス国王の戴冠式のために書かれた、華やかで堂々とした行進曲です。イギリスの王室の式典では今も定番の曲です。\n\n【聴くときのコツ】中間部の、ゆったり歌う大きなメロディを覚えておいてください。曲の最後でそのメロディが金管の大音量で戻ってくるところが、いちばんの見せ場です。"},"コーツ|ダム・バスターズ・マーチ":{"y":"約4分","s":"【どんな曲】第二次世界大戦の作戦を描いたイギリス映画のための行進曲です。映画を離れても、イギリスの式典や演奏会でよく演奏されます。\n\n【聴くときのコツ】中間部で出てくる、胸を張って歌うような大きなメロディに注目してください。イギリスの行進曲らしい気品があります。"},"ヴォーン・ウィリアムズ|海の歌":{"y":"1924年作曲・約3〜4分","s":"【どんな曲】イギリスの船乗りの歌を3つつないだ、短い行進曲です。もとは『イギリス民謡組曲』の一部として書かれましたが、独立して演奏されるようになりました。\n\n【聴くときのコツ】3つの歌の切りかわり目を探しながら聴くと、民謡をつないでマーチにする作り方がよくわかります。"},"タイケ|旧友":{"y":"1889年作曲・約4分","s":"【どんな曲】ドイツの行進曲の代表作で、世界中の軍楽隊やブラスバンドで演奏されています。題は「昔の戦友」という意味です。\n\n【聴くときのコツ】ドイツのマーチは、アメリカのマーチに比べて足どりがどっしりしています。スーザのマーチと聴きくらべると違いがよくわかります。"},"J.F.ワーグナー|双頭の鷲の旗の下に":{"y":"1893年作曲・約3〜4分","s":"【どんな曲】オーストリアの軍楽隊長J.F.ワーグナーの代表作で、ウィーン風の明るさと力強さをあわせ持つマーチです。\n\n【聴くときのコツ】中間部で低音の楽器がメロディを担当するところが聴きどころ。ふだんは伴奏にまわる低音が、ここでは主役です。"},"フチーク|フローレンティナー行進曲":{"y":"1907年作曲・約5〜6分","s":"【どんな曲】チェコの軍楽隊長フチークが、イタリアの街フィレンツェへの思いをこめて書いたマーチです。ふつうのマーチより長く、場面がたくさん変わります。\n\n【聴くときのコツ】中間部のピッコロのソロ（高い音でくるくる回るメロディ）は、ピッコロ奏者の腕の見せどころです。"},"フチーク|剣闘士の入場":{"y":"1897年作曲・約3分","s":"【どんな曲】「サーカスの曲」として誰もが知っているマーチです。半音ずつ動くメロディ（半音階）がこの曲の顔です。\n\n【聴くときのコツ】もとは勇ましい行進曲として書かれたことを思いながら聴くと、ピエロの曲とは違って聞こえてきます。"},"ピーフケ|プロイセンの栄光":{"y":"1871年作曲・約2〜3分","s":"【どんな曲】ドイツの軍楽隊の代表的な行進曲で、今もドイツの式典でよく演奏されます。\n\n【聴くときのコツ】短い中に、太鼓とラッパのかけあい、重厚な金管の響きがつまっています。ドイツの軍楽隊らしい音の厚みに注目してください。"},"プランケット|サンブル・エ・ミューズ連隊":{"y":"約4分","s":"【どんな曲】フランスの軍隊でとても有名な行進曲です。もとは歌で、のちに軍楽隊の行進曲として広まりました。\n\n【聴くときのコツ】フランスの軍楽隊は、木管楽器の華やかさが特徴です。ドイツやアメリカのマーチと響きをくらべてみてください。"},"ヴァンデルロースト|アルセナール":{"y":"約4分","s":"【どんな曲】ベルギーの作曲家ヴァンデルローストの演奏会用マーチです。行進のためではなく、演奏会で聴かせるために書かれた「コンサート・マーチ」です。\n\n【聴くときのコツ】勢いのある出だしと、中間部のゆったりした歌の対比が聴きどころです。動画は作曲者自身が指揮しています。"},"瀬戸口藤吉|軍艦行進曲":{"y":"明治時代作曲・約4分","s":"【どんな曲】日本でもっとも古く、もっとも有名な行進曲のひとつです。もとは歌で、のちに行進曲になりました。\n\n【聴くときのコツ】中間部で、ゆったりとした別のメロディ（「海ゆかば」）が引用されるところで雰囲気ががらりと変わります。"},"古関裕而|オリンピック・マーチ":{"y":"1964年作曲・約5分","s":"【どんな曲】1964年の東京オリンピック開会式で、選手の入場行進に使われたマーチです。日本の行進曲の最高傑作のひとつと言われます。\n\n【聴くときのコツ】最後の部分に「君が代」の一節がさりげなく入っています。知ってから聴くと、ぐっときます。"},"古関裕而|スポーツショー行進曲":{"y":"約3分","s":"【どんな曲】NHKのスポーツ中継のテーマとして、長く親しまれてきたマーチです。\n\n【聴くときのコツ】冒頭のファンファーレだけでも聞き覚えがあるはず。そのあとに続く本編のマーチもじっくり聴いてみてください。"},"團伊玖磨|祝典行進曲":{"y":"1959年作曲・約6分","s":"【どんな曲】皇太子（今の上皇さま）のご結婚を祝って作られた行進曲です。同じ年の全日本吹奏楽コンクールの課題曲にもなりました。\n\n【聴くときのコツ】華やかなファンファーレと、中間部の日本らしいおだやかなメロディの対比に注目してください。"},"上岡洋一|行進曲「秋空に」":{"y":"約2〜3分","s":"【どんな曲】日本の行進曲の中でも演奏される機会がとても多い、短くすっきりしたマーチです。\n\n【聴くときのコツ】2分あまりの短さなので、何度か続けて聴いてメロディを覚えるのにぴったりです。"},"建部知弘|コンサート・マーチ「テイク・オフ」":{"y":"1986年度 課題曲・約4分","s":"【どんな曲】全日本吹奏楽コンクールの課題曲として公募で選ばれたコンサート・マーチです。\n\n【聴くときのコツ】題のとおり、飛行機が飛び立つような勢いのある出だしに注目。中間部でゆったりと空を飛ぶような気分に変わります。"},"高橋伸哉|行進曲「K点を越えて」":{"y":"1999年度 課題曲・約3分","s":"【どんな曲】全日本吹奏楽コンクールの課題曲として書かれたマーチで、今も学校の吹奏楽部で人気があります。\n\n【聴くときのコツ】スキージャンプの踏み切りから空中へ、というイメージで聴くと、曲の勢いがよくわかります。"},"南俊明|マーチ「春風」":{"y":"2005年度 課題曲・約3分","s":"【どんな曲】全日本吹奏楽コンクールの課題曲として書かれた、さわやかなマーチです。\n\n【聴くときのコツ】メロディを受けもつ楽器が次々に入れかわります。どの楽器が歌っているか、追いかけてみてください。"},"和田信|行進曲「希望の空」":{"y":"2012年度 課題曲・約3分","s":"【どんな曲】全日本吹奏楽コンクールの課題曲として書かれた、まっすぐで力強いマーチです。動画は大阪市音楽団（今のOsaka Shion Wind Orchestra）の演奏です。\n\n【聴くときのコツ】歯切れのよい伴奏の上で、メロディがのびのびと歌います。行進曲らしい「きちんとした」気持ちよさを味わってください。"},"近藤悠介|マーチ「エイプリル・リーフ」":{"y":"2019年度 課題曲・約3〜4分","s":"【どんな曲】全日本吹奏楽コンクールの課題曲として書かれたマーチで、近年の課題曲の中でも特に人気の高い曲です。\n\n【聴くときのコツ】明るい第1マーチと、中間部のやわらかい歌の違いに注目してください。"},"鈴木雅史|マーチ「ブルー・スプリング」":{"y":"2022年度 課題曲・約4分","s":"【どんな曲】全日本吹奏楽コンクールの課題曲として書かれたマーチです。題は「青春」を英語にしたものです。\n\n【聴くときのコツ】明るさの中に、少し切ない和音がまじるのがこの曲の味わい。学生時代を思い出しながら聴いてみてください。"},"ジョン・ウィリアムズ|レイダース・マーチ":{"y":"1981年の映画・約5分","s":"【どんな曲】映画「インディ・ジョーンズ」シリーズのテーマとして知られる曲です。もとはオーケストラの曲で、吹奏楽でもとても人気があります。\n\n【聴くときのコツ】トランペットが吹く冒険のテーマと、中間部のゆったりした愛のテーマ。2つの性格の違うメロディを聴きくらべてください。"},"ジョン・ウィリアムズ|帝国のマーチ":{"y":"1980年の映画・約3分","s":"【どんな曲】映画「スター・ウォーズ」シリーズで、悪役ダース・ベイダーとその帝国を表す行進曲です。\n\n【聴くときのコツ】低音の重い足どりと、金管の威圧するようなメロディ。明るいマーチとは正反対の「こわいマーチ」です。"},"エルマー・バーンスタイン|大脱走マーチ":{"y":"1963年の映画・約2〜3分","s":"【どんな曲】戦争映画『大脱走』のテーマ曲です。捕虜収容所から脱走する男たちを描いた映画ですが、音楽は意外なほど明るく陽気です。\n\n【聴くときのコツ】口笛で吹けそうな気楽なメロディに注目。つらい状況でもへこたれない捕虜たちの気持ちが表れています。"},"モーツァルト|セレナード第10番「グラン・パルティータ」":{"y":"全7楽章・約50分","s":"【どんな曲】モーツァルトが13人の管楽器奏者（とコントラバス）のために書いた大きなセレナードです。管楽器だけの合奏曲の最高傑作と言われます。\n\n【聴くときのコツ】第3楽章のアダージョは、オーボエ、クラリネット、バセットホルン（クラリネットの仲間）が、順番に歌を受けわたします。どの楽器が歌っているか聴きわけてみてください。"},"ヘンデル|王宮の花火の音楽":{"y":"1749年作曲・約20分","s":"【どんな曲】花火大会のための音楽で、もとは管楽器と打楽器だけで演奏されました。今はふつう弦楽器も入った版で演奏されます（この動画も弦楽器入りです）。\n\n【聴くときのコツ】まずは最初の序曲（約8分）だけでも。トランペットとホルンの輝かしい響きが、野外の祝祭の空気を伝えてくれます。"},"ドヴォルザーク|管楽セレナード ニ短調":{"y":"1878年作曲・全4楽章・約25分","s":"【どんな曲】ドヴォルザークが管楽器にチェロとコントラバスを加えた小さな合奏のために書いた曲です。素朴で温かい、ボヘミアの香りがします。\n\n【聴くときのコツ】動画は全曲です。まず第1楽章（はじめの約4分）の行進風のメロディから。気に入ったら、最後の楽章でこのメロディが戻ってくるところまで聴いてみてください。"},"R.シュトラウス|13管楽器のためのセレナード":{"y":"1881年作曲・約10分","s":"【どんな曲】リヒャルト・シュトラウスが17歳のころに書いた、13人の管楽器のための1楽章の曲です。\n\n【聴くときのコツ】ホルン4本がつくる柔らかい和音の上で、オーボエやクラリネットが歌います。管楽器の和音がどれほど美しいかを味わう曲です。"},"グノー|小交響曲":{"y":"1885年作曲・全4楽章・約20分","s":"【どんな曲】オペラで有名なグノーが、9人の管楽器のために書いた小さな交響曲です。\n\n【聴くときのコツ】動画は全曲です。フルートが1本だけで、ほかの楽器が2本ずつ。フルートが主役のように活躍する場面を探してみてください。"},"ベルリオーズ|葬送と勝利の大交響曲":{"y":"1840年作曲・全3楽章・約35分","s":"【どんな曲】フランスの革命記念行事のために書かれた、大編成の吹奏楽のための交響曲です。屋外で行進しながら演奏されました。\n\n【聴くときのコツ】第3楽章は勝利をたたえる「アポテオーズ（神格化）」。何十人もの管楽器が一斉に鳴らす、輝かしい響きを味わってください。"},"ホルスト|吹奏楽のための第1組曲":{"y":"1909年作曲・全3曲・約11分","s":"【どんな曲】吹奏楽のために書かれたオリジナル曲の古典中の古典です。吹奏楽の「バイブル」と呼ばれることもあります。\n\n【聴くときのコツ】第1曲シャコンヌは、最初に低音で出てくる8小節のメロディが最後まで何度もくり返されます。くり返しのたびに何が変わっていくか、耳で追いかけてみてください。"},"ホルスト|吹奏楽のための第2組曲":{"y":"1911年作曲・全4曲・約12分","s":"【どんな曲】イギリスの民謡や踊りの曲を使った組曲で、『第1組曲』と並ぶ吹奏楽の古典です。\n\n【聴くときのコツ】第4曲では、速い6拍子の「ダーガソン」と、ゆったりした『グリーンスリーヴス』が同時に鳴ります。2つの曲が重なるところを聴きのがさないでください。"},"ヴォーン・ウィリアムズ|イギリス民謡組曲":{"y":"1923年作曲・全3曲・約11分","s":"【どんな曲】イギリスの民謡をたくさん使った組曲です。行進曲・間奏曲・行進曲の3曲からなります。\n\n【聴くときのコツ】動画は全曲です。まず第1曲（はじめの約3分）の陽気な行進曲から。2曲目の、もの悲しい民謡もとても美しいです。"},"ヴォーン・ウィリアムズ|トッカータ・マルツィアーレ":{"y":"1924年作曲・約5分","s":"【どんな曲】ヴォーン・ウィリアムズが吹奏楽のために書いた、緊張感のある1楽章の曲です。\n\n【聴くときのコツ】短いフレーズが楽器から楽器へ次々に受けわたされます。音がバトンのように回っていく様子を楽しんでください。"},"グレインジャー|リンカンシャーの花束":{"y":"1937年作曲・全6曲・約15分","s":"【どんな曲】イギリスの民謡を、歌っていた人の歌い方のくせまで生かして吹奏楽にした、20世紀の名作です。\n\n【聴くときのコツ】動画は全曲です。1曲目「リスボン」は1分半ほど。気に入ったら、拍子が細かく変わる2曲目以降にも進んでみてください。"},"グレインジャー|アイルランド民謡「デリー地方の歌」":{"y":"約4分","s":"【どんな曲】「ダニー・ボーイ」として知られるアイルランドの古いメロディを、グレインジャーが編曲したものです。\n\n【聴くときのコツ】メロディを支える内側の声部（伴奏の中で動く音）が豊かに動いています。2回目以降はメロディの下の響きに耳を向けてみてください。"},"グレインジャー|シェパーズ・ヘイ":{"y":"約2〜3分","s":"【どんな曲】イギリスの伝統の踊り「モリス・ダンス」の曲を、グレインジャーが編曲したものです。\n\n【聴くときのコツ】同じ短いメロディが、楽器や伴奏を替えながら何度も回ってきます。にぎやかさがどんどん増していくのを楽しんでください。"},"ホルスト|ハマースミス":{"y":"1930年作曲・約13分","s":"【どんな曲】ホルストが吹奏楽のために書いた最後の大作です。ロンドンの下町ハマースミスと、そばを流れるテムズ川を描いています。\n\n【聴くときのコツ】静かな川の流れ（ゆったりした部分）と、にぎやかな市場（速い部分）が交互に、ときには同時に出てきます。"},"シェーンベルク|主題と変奏 作品43a":{"y":"1943年作曲・約12分","s":"【どんな曲】現代音楽の先駆者シェーンベルクが、アメリカで吹奏楽のために書いた変奏曲です。ふつうの長調・短調で書かれていて、意外なほど聴きやすい曲です。\n\n【聴くときのコツ】最初の主題を覚えておくと、変奏のたびに主題がどう姿を変えたかがわかって楽しくなります。"},"ミヨー|フランス組曲":{"y":"1944年作曲・全5曲・約16分","s":"【どんな曲】フランスの5つの地方の民謡を使った組曲です。アメリカの学校のバンドが演奏できるように書かれました。\n\n【聴くときのコツ】第5曲「プロヴァンス」は南フランスの明るい踊り。ほかの曲も、それぞれの地方の風景を思い浮かべながら聴けます。"},"ヒンデミット|吹奏楽のための交響曲 変ロ調":{"y":"1951年作曲・全3楽章・約18分","s":"【どんな曲】ドイツの作曲家ヒンデミットが、アメリカ陸軍のバンドのために書いた本格的な交響曲です。\n\n【聴くときのコツ】動画は全曲です。第1楽章（はじめの約6分）の、金管と木管のかっちりとした組み立てを味わってください。"},"リード|アルメニアン・ダンス パート1":{"y":"約11分","s":"【どんな曲】アルメニアの民謡5つをつなげた、吹奏楽の大人気曲です。日本の吹奏楽部で長く愛され、コンクールでもたびたび演奏されてきました。\n\n【聴くときのコツ】静かな歌、軽快な踊り、はげしい踊りと、場面がどんどん変わります。最後の速い踊りに向かって盛り上がっていく流れを楽しんでください。"},"リード|エル・カミーノ・レアル":{"y":"約10分","s":"【どんな曲】スペインの踊りのリズムを使った「ラテン風の幻想曲」です。速い部分・ゆっくりした部分・速い部分の3つに分かれます。\n\n【聴くときのコツ】中間部の、哀愁をおびたゆっくりしたメロディがこの曲の聴きどころです。"},"リード|ロシアのクリスマス音楽":{"y":"1944年作曲・約15分","s":"【どんな曲】ロシアの古いクリスマスの歌と、ロシア正教会の聖歌の響きを使った曲です。リードの出世作になりました。\n\n【聴くときのコツ】静かな鐘の音から始まり、教会の合唱のような響きが少しずつ大きくなっていきます。最後の大音響まで、ゆっくりした流れに身をまかせてください。"},"リード|フェスティバル・プレリュード":{"y":"約5分","s":"【どんな曲】演奏会の幕開けによく使われる、短く華やかな曲です。\n\n【聴くときのコツ】同じファンファーレが何度もくり返され、そのたびに少しずつ大きくなっていきます。"},"バーンズ|アルヴァマー序曲":{"y":"約8分","s":"【どんな曲】アメリカの作曲家バーンズの代表作で、日本の吹奏楽部でも長く人気の曲です。\n\n【聴くときのコツ】速い・ゆっくり・速いの3つの部分からなります。中間部のゆったりした歌を味わってから、また元気な部分に戻るのを楽しんでください。"},"バーンズ|交響曲第3番":{"y":"1997年作曲・全4楽章・約40分","s":"【どんな曲】バーンズが幼い娘を亡くした悲しみの中で書いた交響曲で、「悲劇的」という副題がついています。\n\n【聴くときのコツ】第3楽章は、亡き娘ナタリーにささげられた、静かで美しい楽章です。重い曲ですが、悲しみの中のやさしさを感じてください。"},"クロード・T・スミス|フェスティヴァル・ヴァリエーションズ":{"y":"約10分","s":"【どんな曲】アメリカ空軍のバンドのために書かれた、とてもむずかしい曲です。腕のある楽団の「力試し」として知られています。\n\n【聴くときのコツ】冒頭のホルンの高い音の主題が、曲の中で何度も形を変えて出てきます。"},"クロード・T・スミス|永遠の父なる神よ":{"y":"約7分","s":"【どんな曲】海で危険にあう人々の無事を祈る賛美歌をもとにした曲です。\n\n【聴くときのコツ】静かな祈りから、嵐の海の場面へ。そして最後に賛美歌が堂々と戻ってくる、ドラマのような流れを楽しんでください。"},"ティケリ|シェナンドー":{"y":"約6分","s":"【どんな曲】アメリカの古い民謡「シェナンドー」を、静かで美しい響きで歌わせた曲です。\n\n【聴くときのコツ】メロディが少しずつ形を変えながら、楽器から楽器へ受けつがれていきます。静かな曲なので、音量を少し上げて聴くのがおすすめです。"},"ホルシンガー|ある賛美歌による":{"y":"約5分","s":"【どんな曲】賛美歌「やすけさは川のごとく」をもとにした、ゆったりとした曲です。\n\n【聴くときのコツ】賛美歌のメロディが、温かい和音に包まれて静かに歌われます。"},"チャンス|朝鮮民謡の主題による変奏曲":{"y":"約7分","s":"【どんな曲】朝鮮半島の民謡を主題にした変奏曲で、アメリカの学校のバンドの定番曲です。\n\n【聴くときのコツ】最初の主題をよく聴いておくと、そのあとの変奏で、主題がどう変わったかを見つけられます。"},"ウィテカー|オクトーバー":{"y":"約7分","s":"【どんな曲】合唱曲でも人気のウィテカーが、秋の空気を音にした吹奏楽曲です。\n\n【聴くときのコツ】大きく盛り上がるところより、静かに始まって静かに終わる、その間の和音の変化を味わってください。"},"ヘイゾ|ライド":{"y":"約4分","s":"【どんな曲】最初から最後まで速いテンポで突き進む、ドライブのような曲です。\n\n【聴くときのコツ】ずっと速いまま走り続けますが、途中で少しだけ景色が開けるように、メロディが大きく歌う場面があります。動画は作曲者自身の指揮です。"},"ティケリ|ブルー・シェイズ":{"y":"1996年作曲・約10分","s":"【どんな曲】ジャズの「ブルース」の響きを使った吹奏楽曲です。\n\n【聴くときのコツ】中ほどで出てくるクラリネットのジャズ風のソロ（何人もの奏者がそろって吹くこともあります）が、この曲の名物です。"},"バーンスタイン|キャンディード序曲":{"y":"1956年作曲・約5分","s":"【どんな曲】ミュージカル『キャンディード』の序曲です。オーケストラ版を吹奏楽に編曲したものも、とてもよく演奏されます。\n\n【聴くときのコツ】速いテンポのまま、ころころと場面が変わります。最後のたたみかけるような終わり方まで一気に聴いてください。"},"スパーク|ドラゴンの年":{"y":"全3曲・約14分","s":"【どんな曲】イギリスの作曲家スパークの代表作です。もとは金管バンド（ブラスバンド）のための曲で、吹奏楽版が作られました。\n\n【聴くときのコツ】動画は全曲です。第3曲フィナーレは動画のおわりの約5分。時間があれば、第2曲の静かな間奏曲から続けて聴くと、フィナーレの迫力がいっそう際立ちます。"},"スパーク|ダンス・ムーヴメンツ":{"y":"1996年作曲・全4楽章・約20分","s":"【どんな曲】アメリカ空軍のバンドのために書かれた、4つの踊りからなる曲です。\n\n【聴くときのコツ】第2楽章は木管楽器だけ、第3楽章は金管楽器だけで演奏されます。吹奏楽の楽器の色の違いを、楽章ごとに聴きくらべてください。"},"デ・メイ|交響曲第1番「指輪物語」":{"y":"1988年完成・全5楽章・約45分","s":"【どんな曲】トールキンの小説『指輪物語』を5つの場面で描いた、吹奏楽の交響曲です。\n\n【聴くときのコツ】第1楽章「ガンダルフ」は、魔法使いの堂々とした主題と、白い馬が駆けぬける速い場面からなります。"},"デ・ハーン|オレゴン":{"y":"約9分","s":"【どんな曲】オランダの作曲家デ・ハーンの代表作で、アメリカ西部への旅を描いた曲です。\n\n【聴くときのコツ】走り出すようなリズムが、曲全体をぐいぐい前に進めます。"},"ヴァンデルロースト|スパルタクス":{"y":"約14分","s":"【どんな曲】古代ローマで反乱を起こした剣闘士スパルタクスの物語を描いた交響詩です。\n\n【聴くときのコツ】はげしい戦いの音楽と、中間部の静かな祈りのような部分の対比を味わってください。"},"グレイアム|ハリソンの夢":{"y":"約14分","s":"【どんな曲】18世紀のイギリスの時計職人ジョン・ハリソンの生涯を描いた曲です。もとは金管バンドのための曲で、吹奏楽版もあります。\n\n【聴くときのコツ】波の荒々しさと、時計の刻みのようなリズム。海と時計という2つのイメージを思い浮かべながら聴いてください。"},"保科洋|風紋":{"y":"1987年度 課題曲・約5分","s":"【どんな曲】全日本吹奏楽コンクールの課題曲として書かれた曲で、課題曲の中でも名曲中の名曲と言われます。\n\n【聴くときのコツ】静かな部分の美しさと、少しずつ高まっていく流れに注目してください。"},"福田洋介|吹奏楽のための「風之舞」":{"y":"2004年度 課題曲・約5分","s":"【どんな曲】全日本吹奏楽コンクールの課題曲として書かれた、日本の祭りの雰囲気をもつ曲です。\n\n【聴くときのコツ】勢いのある「舞」の部分と、しっとりした歌の部分が交互にあらわれます。"},"兼田敏|シンフォニック・バンドのためのパッサカリア":{"y":"約6分","s":"【どんな曲】日本の作曲家兼田敏が書いた、吹奏楽の古典的な名作です。\n\n【聴くときのコツ】低音がくり返す短いメロディを最初に覚えてしまうと、その上にほかの楽器が重なっていく様子がよくわかります。"},"大栗裕|大阪俗謡による幻想曲":{"y":"約12分","s":"【どんな曲】大阪の祭りの音楽やわらべうたをもとにした、エネルギーいっぱいの曲です。\n\n【聴くときのコツ】お囃子のリズムや、聞き覚えのあるような節回しを探しながら聴いてください。"},"大栗裕|吹奏楽のための神話":{"y":"約14分","s":"【どんな曲】日本の神話「天の岩屋戸」の物語を描いた曲です。\n\n【聴くときのコツ】暗く静かな「岩屋に隠れる」場面から、にぎやかな踊りの場面へ。物語の流れを思い浮かべながら聴くと楽しめます。"},"伊藤康英|吹奏楽のための交響詩「ぐるりよざ」":{"y":"全3楽章・約20分","s":"【どんな曲】長崎の隠れキリシタンの祈りと、長崎の祭りをテーマにした交響詩です。\n\n【聴くときのコツ】動画は全曲です。第3楽章「祭り」は動画のおわりの約7〜8分。時間があれば最初から聴くと、静かな祈りから祭りの爆発へのドラマがよくわかります。"},"酒井格|たなばた":{"y":"約8分","s":"【どんな曲】七夕の夜を描いた、日本の吹奏楽の大人気曲です。\n\n【聴くときのコツ】夜空に広がるようなメロディが何度も出てきます。最後の大きな盛り上がりまで、まっすぐな気持ちよさを楽しんでください。"},"真島俊夫|三つのジャポニスム":{"y":"全3曲・約18分","s":"【どんな曲】日本の情景を「鶴が舞う」「雪の川」「祭り」の3つの曲で描いた作品です。\n\n【聴くときのコツ】動画は全曲です。第3曲「祭り」は動画のおわりの約6分。第1曲「鶴が舞う」の静けさとくらべると、祭りの熱気がいっそう際立ちます。"},"樽屋雅徳|斐伊川に流るるクシナダ姫の涙":{"y":"約9分","s":"【どんな曲】出雲（島根県）の神話、やまたのおろちの物語をもとにした曲です。\n\n【聴くときのコツ】姫の悲しみを表す静かな歌と、おろちとの闘いの場面の対比を味わってください。"},"東海林修|ディスコ・キッド":{"y":"1977年度 課題曲・約4分","s":"【どんな曲】全日本吹奏楽コンクールの課題曲として書かれた、ディスコ音楽風の曲です。今も演奏会のポップスの定番です。\n\n【聴くときのコツ】ドラムのリズムに乗って、金管とサックスがはじけます。身体でリズムを感じながら聴いてください。"},"和泉宏隆（真島俊夫 編曲）|宝島":{"y":"約5分","s":"【どんな曲】フュージョンバンドの曲を吹奏楽に編曲した、吹奏楽ポップスの大定番です。動画は編曲者・真島俊夫さん自身の指揮です。\n\n【聴くときのコツ】後半、メロディが何度もくり返されて大きく盛り上がるところが楽しい曲です。"},"ヴァン・マッコイ|アフリカン・シンフォニー":{"y":"1974年の曲・約4〜5分","s":"【どんな曲】アメリカのディスコ音楽を吹奏楽に編曲したもので、高校野球の応援でおなじみです。\n\n【聴くときのコツ】太鼓のリズムに乗って、金管が大きく吹く「パーパーパー」の部分。球場の応援を思い出しながら聴いてください。"},"ラファエル・エルナンデス|エル・クンバンチェロ":{"y":"約4分","s":"【どんな曲】プエルトリコ生まれのラテン音楽で、吹奏楽ではアンコールの定番です。\n\n【聴くときのコツ】さまざまな打楽器が刻むラテンのリズムを聴きわけてみてください。"},"ルイ・プリマ|シング・シング・シング":{"y":"約5分","s":"【どんな曲】1930年代のスウィング・ジャズの名曲で、吹奏楽やビッグバンドの大定番です。\n\n【聴くときのコツ】ドラムのリズムに乗って、サックスやトランペットが次々にソロをとります。"},"大野雄二|ルパン三世のテーマ":{"y":"1977年の曲・約4分","s":"【どんな曲】アニメ『ルパン三世』の主題曲です。吹奏楽やビッグバンドの演奏会で大人気です。\n\n【聴くときのコツ】サックスとトランペットのかっこいいメロディ。ジャズの「ノリ」を感じながら聴いてください。"},"和泉宏隆|OMENS OF LOVE":{"y":"約4分","s":"【どんな曲】フュージョンバンドの曲を吹奏楽に編曲したもので、『宝島』と並ぶ人気曲です。\n\n【聴くときのコツ】胸が高鳴るようなメロディを、サックスやトランペットが気持ちよく歌います。"},"ジョン・ウィリアムズ|スター・ウォーズ メインテーマ":{"y":"1977年の映画・約5分","s":"【どんな曲】映画「スター・ウォーズ」のメインテーマです。もとはオーケストラの曲で、吹奏楽でもとても人気があります。\n\n【聴くときのコツ】トランペットのファンファーレのあと、中間部のレイア姫のテーマ（ゆったりした歌）がとても美しいです。"},"モリコーネ（デ・メイ 編曲）|モリコーネ・メドレー":{"y":"約9分","s":"【どんな曲】イタリアの映画音楽の巨匠モリコーネの名曲を、デ・メイが吹奏楽にまとめたメドレーです。\n\n【聴くときのコツ】西部劇の口笛風のメロディや、美しい愛のテーマなど、映画音楽の名場面を楽しんでください。"},"レスピーギ|交響詩「ローマの祭り」":{"y":"全4曲・約25分","s":"【どんな曲】ローマの祭りを4つの場面で描いた、レスピーギの交響詩です。もとはオーケストラ曲で、吹奏楽版もよく演奏されます。\n\n【聴くときのコツ】第4曲「主顕祭」は、ローマの下町の祭りの大騒ぎ。いろいろな音が入り乱れるにぎやかさを楽しんでください。"},"ラヴェル|バレエ「ダフニスとクロエ」":{"y":"1912年初演・約15分（第2組曲）","s":"【どんな曲】ラヴェルのバレエ音楽です。オーケストラ曲ですが、吹奏楽に編曲されて、コンクールで何度も演奏されてきました。\n\n【聴くときのコツ】動画は第2組曲の全部（夜明け→パントマイム→全員の踊り）です。はじめの「夜明け」の、さざ波の上に朝日が昇るような部分をまず味わってください。"},"レスピーギ|交響詩「ローマの松」":{"y":"1924年初演・全4曲・約22分","s":"【どんな曲】ローマの松を4つの場面で描いた、レスピーギの交響詩です。\n\n【聴くときのコツ】第4曲「アッピア街道の松」は、古代ローマの軍隊がだんだん近づいてくる様子。小さな音から大音量まで、5分かけてふくらんでいきます。"}},"embed":true,"noEmbed":["bVPBABVYsz8"],"kind":"吹奏楽","weakSections":["intro","kadai","scenes","instruments"],"stapleSections":["intro","scenes"]};
+const Q = s => (s.startsWith("『") ? s : "「" + s + "」");
+if (DATA.embed) {
+  const player = document.getElementById("player");
+  const pmsg = document.getElementById("pmsg"), ptitle = document.getElementById("ptitle"), pyt = document.getElementById("pyt");
+  const byId = {}; Object.values(DATA.works).forEach(w => { byId[w.id] = w; });
+  const titleOf = id => { const w = byId[id]; return w ? `${w.c}${Q(w.w)}${w.p}` : ""; };
+  const BL = "embed-blocked-v1";
+  const blocked = new Set((() => { try { return JSON.parse(localStorage.getItem(BL) || "[]"); } catch { return []; } })());
+  const saveBlocked = () => { try { localStorage.setItem(BL, JSON.stringify([...blocked])); } catch {} };
+  (DATA.noEmbed || []).forEach(x => blocked.add(x));
+  let yt = null, list = [], skipped = 0, apiReady = null;
+  const loadApi = () => apiReady ||= new Promise(res => {
+    window.onYouTubeIframeAPIReady = res;
+    const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(s);
+  });
+  const showTitle = () => {
+    const i = yt && yt.getPlaylistIndex ? Math.max(0, yt.getPlaylistIndex()) : 0;
+    const id = list[i] || list[0];
+    ptitle.textContent = list.length > 1 ? `${i + 1}/${list.length}本目：${titleOf(id)}` : titleOf(id);
+    const rest = list.slice(i, i + 50);
+    pyt.href = rest.length > 1 ? "https://www.youtube.com/watch_videos?video_ids=" + rest.join(",") : "https://www.youtube.com/watch?v=" + id;
+  };
+  const onError = () => {
+    const i = list.length > 1 && yt.getPlaylistIndex ? Math.max(0, yt.getPlaylistIndex()) : 0;
+    const id = list[i]; if (id) { blocked.add(id); saveBlocked(); }
+    if (list.length > 1 && i < list.length - 1) {
+      skipped++; pmsg.textContent = `YouTubeでしか見られない動画を${skipped}本とばしました。`; pmsg.hidden = false;
+      yt.nextVideo();
+    } else {
+      pmsg.textContent = "この動画は、持ち主の設定でYouTubeでしか見られません。右上の「YouTubeで開く」から見てください。"; pmsg.hidden = false;
+    }
+  };
+  async function play(ids, href) {
+    list = ids; skipped = 0; pmsg.hidden = true;
+    player.hidden = false; document.body.classList.add("playing");
+    showTitle();
+    await loadApi();
+    if (!yt) {
+      yt = new YT.Player("pframe", {
+        playerVars: {autoplay: 1, rel: 0, playsinline: 1},
+        events: {
+          onReady: () => start(),
+          onError,
+          onStateChange: e => { if (e.data === 1 || e.data === -1) showTitle(); }
+        }
+      });
+    } else start();
+  }
+  function start() { if (list.length > 1) yt.loadPlaylist(list); else yt.loadVideoById(list[0]); }
+  /* 再生のしかた（この端末に覚える）：page＝ページの中で／app＝YouTube（アプリ）で開く */
+  const MK = "play-mode-v1", modeEl = document.getElementById("mode");
+  let mode = (() => { try { return localStorage.getItem(MK) || "page"; } catch { return "page"; } })();
+  const showMode = () => modeEl.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.m === mode)));
+  modeEl.hidden = false; showMode();
+  modeEl.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    mode = b.dataset.m; try { localStorage.setItem(MK, mode); } catch {}
+    showMode();
+    if (mode === "app" && yt && yt.pauseVideo) yt.pauseVideo();
+  });
+  document.addEventListener("click", ev => {
+    const a = ev.target.closest('a[href^="https://www.youtube.com/watch"]');
+    if (!a || a.id === "pyt" || "yt" in a.dataset || mode === "app") return;
+    const u = new URL(a.href);
+    const ids = u.pathname === "/watch_videos" ? (u.searchParams.get("video_ids") || "").split(",").filter(Boolean) : [u.searchParams.get("v")];
+    const playable = ids.filter(x => x && !blocked.has(x));
+    if (!playable.length) return;            // ページで再生できない動画は、そのまま YouTube で開く
+    ev.preventDefault();
+    play(playable, a.href);
+  });
+  document.getElementById("pclose").onclick = () => { if (yt && yt.stopVideo) yt.stopVideo(); player.hidden = true; document.body.classList.remove("playing"); };
+}
+const tocbtn = document.getElementById("tocbtn"), tocEl = document.getElementById("toc");
+const setToc = open => { tocEl.hidden = !open; tocbtn.setAttribute("aria-expanded", String(open)); tocbtn.textContent = open ? "✕ 目次をとじる" : "☰ 目次をひらく"; };
+tocbtn.onclick = () => setToc(tocEl.hidden);
+tocEl.addEventListener("click", e => { if (e.target.closest("a")) setToc(false); });
+document.getElementById("totop").onclick = () => { setToc(false); window.scrollTo({top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); };
+const W = DATA.works, A = DATA.about || {};
+const listUrl = keys => "https://www.youtube.com/watch_videos?video_ids=" + keys.map(k => (W[k] ? W[k].id : k)).join(",");
+const toSec = s => s.split(":").map(Number).reduce((a,b)=>a*60+b,0);
+const fmtTotal = sec => { const h=Math.floor(sec/3600), m=Math.round(sec%3600/60); return h ? `約${h}時間${m}分` : `約${m}分`; };
+const esc = s => s.replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const chunk = (a,n) => { const r=[]; for(let i=0;i<a.length;i+=n) r.push(a.slice(i,i+n)); return r; };
+
+const secsEl = document.getElementById("secs"), toc = document.getElementById("toc");
+document.getElementById("m-works").textContent = Object.keys(W).length + "曲";
+document.getElementById("m-secs").textContent = DATA.sections.length + "のリスト";
+
+DATA.sections.forEach((s, si) => {
+  const keys = s.g.flatMap(g=>g[1]);
+  const total = keys.reduce((a,k)=>a+toSec(W[k].len),0);
+  const a = document.createElement("a"); a.href = "#"+s.id; a.textContent = s.t; toc.appendChild(a);
+  const d = document.createElement("details"); d.className = "sec"; d.id = s.id; if (si===0) d.open = true;
+  const parts = chunk(keys, 50);
+  let html = `<summary><span class="sec-title">${esc(s.t)}</span><span class="sec-sub">${esc(s.lead)}　${keys.length}本・${fmtTotal(total)}</span></summary><div class="secbody">`;
+  html += `<div class="playall">` + parts.map((p,i)=>`<a href="${listUrl(p)}">▶ ${parts.length>1?`${i*50+1}〜${i*50+p.length}本目を`:"このリストを"}続けて再生</a>` + (DATA.embed?`<a class="ytb" data-yt href="${listUrl(p)}">YouTubeで${parts.length>1?`（${i*50+1}〜）`:""}</a>`:"")).join("") + `</div>`;
+  let n = 0;
+  s.g.forEach(([gname, ks]) => {
+    if (gname) html += `<h3 class="grp">${esc(gname)}${s.g.length>1 && ks.length>1 ? `<a href="${listUrl(ks)}">▶ ${ks.length}本を続けて</a>` : ""}</h3>`;
+    html += `<ol class="program">`;
+    ks.forEach((k, i) => {
+      n++; const t = W[k]; const rest = keys.slice(n-1, n-1+50);
+      html += `<li class="card" data-key="${k}" data-text="${esc((t.c+t.w+t.p+t.pt+t.tr+gname+s.t).toLowerCase())}">
+        <div class="no">${n}</div>
+        <div class="body">
+          <div class="composer">${esc(t.c)}</div>
+          <p class="work">${esc(t.w)}<br><span class="part">${esc(t.p)}</span>　<span class="time">${t.len}</span></p>
+          <p class="point"><b>聴きどころ</b>${esc(t.pt)}</p>
+          <p class="trivia"><b>豆知識</b>${esc(t.tr)}</p>
+          ${A[t.c+"|"+t.w] ? `<details class="about" data-a="${esc(t.c+"|"+t.w)}"><summary>作品について<span style="font-weight:400;color:var(--muted)">　${esc(A[t.c+"|"+t.w].y||"")}</span></summary></details>` : ""}
+          ${t.ly ? `<details class="lyr" data-key="${k}"><summary>${t.ly.g ? "歌詞の大意" : t.ly.b ? "歌詞の対訳（原文と訳）" : "歌詞の訳（全文）"}<span style="font-weight:400;color:var(--muted)">　${esc(t.ly.l||"")}</span></summary></details>` : ""}
+          <p class="perf">動画：${esc(t.ch)}</p>
+          <div class="links"><a class="go" href="https://www.youtube.com/watch?v=${t.id}">▶ 再生</a>${DATA.embed?`<a class="ytb" data-yt href="https://www.youtube.com/watch?v=${t.id}">YouTubeで</a>`:""}${n<keys.length?`<a class="from" href="${listUrl(rest)}">ここから続けて再生</a>`:""}</div>
+          <div class="rate" role="group" aria-label="聴いた感想"><span>聴いたら：</span><button type="button" data-r="like" aria-pressed="false">好き</button><button type="button" data-r="ok" aria-pressed="false">ふつう</button><button type="button" data-r="dislike" aria-pressed="false">苦手</button></div>
+        </div></li>`;
+    });
+    html += `</ol>`;
+  });
+  d.innerHTML = html + `</div>`;
+  secsEl.appendChild(d);
+});
+
+/* 歌詞の訳は、開いたときに中身を入れる（ページを軽くするため） */
+secsEl.addEventListener("toggle", e => {
+  const d = e.target; if (!d.classList || !d.open || d.dataset.done) return;
+  if (d.classList.contains("about")) {
+    d.dataset.done = "1";
+    d.insertAdjacentHTML("beforeend", `<div class="lyt">${esc(A[d.dataset.a].s)}</div><button type="button" class="fold">▲ たたむ</button>`);
+    return;
+  }
+  if (!d.classList.contains("lyr")) return;
+  const ly = W[d.dataset.key].ly; d.dataset.done = "1";
+  const body = ly.b
+    ? `<div class="bi">` + ly.b.map(([o, j]) =>
+        !o && !j ? `<div class="gap"></div>`
+        : o.startsWith("【") && !j ? `<p class="sp">${esc(o)}</p>`
+        : (o ? `<p class="o" lang="${ly.c||""}">${esc(o)}</p>` : "") + (j ? `<p class="j">${esc(j)}</p>` : "")).join("") + `</div>`
+    : `<div class="lyt">${esc(ly.t)}</div>`;
+  d.insertAdjacentHTML("beforeend", (ly.n ? `<p class="lyn">${esc(ly.n)}</p>` : "") + body + `<button type="button" class="fold">▲ たたむ</button>`);
+}, true);
+
+/* 長い欄の下の「たたむ」：たたんで、その欄の見出しまで画面を戻す */
+secsEl.addEventListener("click", e => {
+  const b = e.target.closest("button.fold"); if (!b) return;
+  const d = b.closest("details"); d.open = false;
+  d.scrollIntoView({block: "start"});
+});
+
+function openFromHash(){ const id = location.hash.slice(1); const el = id && document.getElementById(id); if (el && el.tagName==="DETAILS"){ el.open = true; el.scrollIntoView({block:"start"}); } }
+window.addEventListener("hashchange", openFromHash); openFromHash();
+
+const q = document.getElementById("q"), hits = document.getElementById("hits");
+q.addEventListener("input", () => {
+  const v = q.value.trim().toLowerCase();
+  let c = 0;
+  document.querySelectorAll("details.sec").forEach(d => {
+    let any = false;
+    d.querySelectorAll(".card").forEach(card => { const ok = !v || card.dataset.text.includes(v); card.hidden = !ok; if (ok) { any = true; c++; } });
+    d.querySelectorAll("h3.grp").forEach(h => { const ol = h.nextElementSibling; h.hidden = v && ![...ol.children].some(li=>!li.hidden); });
+    d.hidden = !!v && !any;
+    if (v && any) d.open = true;
+  });
+  hits.textContent = v ? `${c}件みつかりました（同じ曲が複数のリストに入っていることがあります）` : "";
+});
+
+/* ---- 好き嫌いの記録とおすすめ ---- */
+const KIND = DATA.kind || "クラシック";
+const LABEL = {like:"好き", ok:"ふつう", dislike:"苦手"};
+const ratings = {};               // key -> "like" | "ok" | "dislike"
+let store = null;                 // db の ratings コレクション（使えないときは null）
+const LS = "ratings-v1";
+const loadLocal = () => { try { return JSON.parse(localStorage.getItem(LS) || "{}"); } catch { return {}; } };
+const saveLocal = () => { try { localStorage.setItem(LS, JSON.stringify(ratings)); } catch {} };
+
+// 曲ごとの所属（章とグループ）
+const groupsOf = {};
+DATA.sections.forEach(s => s.g.forEach(([gname, ks]) => ks.forEach(k => {
+  (groupsOf[k] ||= new Set()).add(s.id);
+  if (!(DATA.weakSections || []).includes(s.id)) groupsOf[k].add(s.id + "/" + gname);
+})));
+const shareGroup = (a, b) => [...groupsOf[a]].some(g => g.includes("/") && groupsOf[b].has(g));
+const shareSec = (a, b) => [...groupsOf[a]].some(g => !g.includes("/") && !(DATA.weakSections || []).includes(g) && groupsOf[b].has(g));
+
+function paintButtons(){
+  document.querySelectorAll(".card").forEach(card => {
+    const r = ratings[card.dataset.key];
+    card.querySelectorAll(".rate button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.r === r)));
+  });
+}
+
+function recommend(){
+  const rated = Object.keys(ratings).filter(k => W[k]);
+  const likes = rated.filter(k => ratings[k] === "like");
+  const dislikes = rated.filter(k => ratings[k] === "dislike");
+  const oks = rated.filter(k => ratings[k] === "ok");
+  const scores = [];
+  for (const k of Object.keys(W)) {
+    if (ratings[k]) continue;
+    let s = 0, why = null, best = 0;
+    for (const L of likes) {
+      let add = 0, reason = "";
+      if (W[L].c === W[k].c) { add += 3; reason = "同じ作曲家"; }
+      if (shareGroup(L, k)) { add += 2; reason = reason || "同じなかま"; }
+      else if (shareSec(L, k)) { add += 1; reason = reason || "同じ章"; }
+      if (add > best) { best = add; why = `${Q(W[L].w)}が好きなら（${reason}）`; }
+      s += add;
+    }
+    for (const O of oks) if (W[O].c === W[k].c) s += 0.5;
+    for (const D of dislikes) { if (W[D].c === W[k].c) s -= 2; if (shareGroup(D, k)) s -= 1; }
+    if (s > 0) scores.push({k, s, why});
+  }
+  scores.sort((a,b) => b.s - a.s);
+  const per = {}, top = [];
+  for (const x of scores) { const c = W[x.k].c; if ((per[c] || 0) >= 2) continue; per[c] = (per[c] || 0) + 1; top.push(x); if (top.length >= 8) break; }
+  if (likes.length && top.length < 8) {
+    const disliked = new Set(dislikes.map(d => W[d].c));
+    const staples = DATA.sections.filter(s => (DATA.stapleSections || []).includes(s.id)).flatMap(s => s.g.flatMap(g => g[1]));
+    for (const k of staples) {
+      if (top.length >= 8) break;
+      if (ratings[k] || top.some(x => x.k === k) || disliked.has(W[k].c) || (per[W[k].c] || 0) >= 2) continue;
+      per[W[k].c] = (per[W[k].c] || 0) + 1; top.push({k, s: 0, why: "まだ聴いていない定番の名曲"});
+    }
+  }
+  return {rated, likes, dislikes, oks, top};
+}
+
+function renderRecs(){
+  const {rated, likes, dislikes, oks, top} = recommend();
+  const stat = document.getElementById("r-stat"), list = document.getElementById("r-list"), btns = document.getElementById("r-btns");
+  list.innerHTML = ""; btns.innerHTML = "";
+  if (!rated.length) { stat.textContent = "聴いた曲に「好き・ふつう・苦手」をつけると、ここに次のおすすめが出ます。"; return; }
+  stat.textContent = `これまでに${rated.length}曲を記録（好き${likes.length}・ふつう${oks.length}・苦手${dislikes.length}）。`;
+  if (!likes.length) { stat.textContent += "「好き」が1曲以上あると、おすすめが出ます。"; }
+  top.forEach(({k, why}) => {
+    const t = W[k]; const li = document.createElement("li");
+    li.innerHTML = `<a href="https://www.youtube.com/watch?v=${t.id}">${esc(t.c)}${esc(Q(t.w))}</a>　${esc(t.p)}<small>${esc(why || "")}</small>`;
+    list.appendChild(li);
+  });
+  if (top.length) {
+    const a = document.createElement("a"); a.href = listUrl(top.map(x => W[x.k].id)); a.textContent = "▶ おすすめを続けて再生"; btns.appendChild(a);
+  }
+  if (sampleFn && likes.length) {
+    const b = document.createElement("button"); b.type = "button"; b.id = "ask-ai";
+    b.textContent = "Claudeに、リストにない曲もおすすめしてもらう"; b.onclick = askClaude; btns.appendChild(b);
+  }
+}
+
+let sampleFn = null;
+async function askClaude(){
+  const out = document.getElementById("ai-out"), btn = document.getElementById("ask-ai");
+  const {likes, dislikes, oks} = recommend();
+  const name = k => `${W[k].c}${Q(W[k].w)}${W[k].p}`;
+  const prompt = `あなたは${KIND}にくわしい案内役です。聴き始めたばかりの人に、次に聴く曲をすすめてください。
+好きだった曲：\n${likes.map(name).join("\n") || "なし"}
+ふつうだった曲：\n${oks.map(name).join("\n") || "なし"}
+苦手だった曲：\n${dislikes.map(name).join("\n") || "なし"}
+すでに手元のリストにある曲（これ以外から選ぶ）：\n${Object.values(W).map(w => w.c + Q(w.w)).join("、")}
+上の好みに合いそうで、リストにない${KIND}の曲（${KIND === "オペラ" ? "またはアリア・場面" : KIND === "吹奏楽" ? "オリジナル曲・マーチ・編曲もの" : "または楽章"}）を5つ選んでください。
+JSONの配列だけで答えてください。各要素は {"composer": 作曲家の日本語名, "title": 曲名の日本語, "part": 聴く部分（例：第2楽章）, "reason": なぜ合いそうか（40字以内、やさしい日本語）, "search": YouTubeで探すための英語の検索語} です。`;
+  btn.disabled = true; out.innerHTML = `<p class="stat">考えています…（数十秒かかることがあります）</p>`;
+  try {
+    const res = await sampleFn.json(prompt);
+    if (!Array.isArray(res) || !res.length) throw {code: "invalid_json"};
+    out.innerHTML = `<p class="stat">Claudeのおすすめ（リストにない曲。YouTubeの検索結果が開きます）</p><ol>` + res.slice(0, 5).map(x =>
+      `<li><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(String(x.search || x.title || ""))}">${esc(String(x.composer || ""))}「${esc(String(x.title || ""))}」</a>　${esc(String(x.part || ""))}<small>${esc(String(x.reason || ""))}</small></li>`).join("") + `</ol>`;
+  } catch (e) {
+    const msg = {not_granted: "Claudeを使う許可がないため、使えませんでした。", rate_limited: "いまは混みあっています。少し時間をおいてから押してください。"}[e && e.code];
+    out.innerHTML = `<p class="stat">${msg || "うまく答えを受け取れませんでした。もう一度押してみてください。"}</p>`;
+    if (e && (e.code === "not_granted" || e.code === "sampling_disabled")) { btn.remove(); sampleFn = null; }
+  } finally { if (btn.isConnected) btn.disabled = false; }
+}
+
+async function setRating(key, r){
+  const prev = ratings[key];
+  const next = prev === r ? null : r;
+  if (next) ratings[key] = next; else delete ratings[key];
+  paintButtons(); renderRecs(); saveLocal();
+  if (store) {
+    try { next ? await store.doc(key).set({r: next, title: W[key].c + Q(W[key].w), at: new Date().toISOString()}) : await store.doc(key).delete(); }
+    catch (e) { document.getElementById("r-note").textContent = "記録をサーバーに保存できませんでした。この端末の中にだけ残しています。"; }
+  }
+}
+
+secsEl.addEventListener("click", ev => {
+  const b = ev.target.closest(".rate button"); if (!b) return;
+  setRating(b.closest(".card").dataset.key, b.dataset.r);
+});
+
+Object.assign(ratings, loadLocal());
+paintButtons(); renderRecs();
+
+(async () => {
+  const note = document.getElementById("r-note");
+  const db = window.claude ? await window.claude.use("db").catch(() => null) : null;
+  if (!db) { note.textContent = "記録はこの端末の中にだけ保存されます（ほかの端末やClaudeからは見えません）。"; return; }
+  store = db.collection("ratings");
+  note.textContent = "記録を読みこみ中…";
+  const timer = setTimeout(() => { note.textContent = "記録の保存先にまだつながりません。つながるまではこの端末の中に保存します。"; }, 10000);
+  store.onSnapshot(snap => {
+    if (!snap.metadata.fromCache) { clearTimeout(timer); note.textContent = "記録は保存され、ほかの端末やチャットのClaudeからも見られます。"; }
+    for (const k of Object.keys(ratings)) delete ratings[k];
+    snap.docs.forEach(d => { const v = d.data(); if (v && LABEL[v.r]) ratings[d.id] = v.r; });
+    saveLocal(); paintButtons(); renderRecs();
+  }, () => { clearTimeout(timer); store = null; note.textContent = "記録の保存先が使えないため、この端末の中にだけ保存しています。"; });
+  sampleFn = await window.claude.use("sample").catch(() => null);
+  renderRecs();
+})();
+</script>
+
+</body></html>
