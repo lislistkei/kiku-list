@@ -58,6 +58,11 @@ ol.program{list-style:none;margin:0;padding:0;display:flex;flex-direction:column
 details.lyr{border:1px solid var(--line);border-radius:8px;font-size:14.5px}
 details.lyr>summary{cursor:pointer;padding:8px 10px;font-size:13px;font-weight:700;color:var(--accent)}
 details.lyr .lyt{padding:0 12px 12px;white-space:pre-wrap;line-height:1.85;overflow-wrap:anywhere}
+details.lyr .bi{padding:0 12px 12px;line-height:1.7;overflow-wrap:anywhere}
+details.lyr .bi .o{margin:6px 0 0;font-size:13px;color:var(--muted);font-style:italic;font-family:Georgia,"Times New Roman",serif}
+details.lyr .bi .j{margin:0}
+details.lyr .bi .sp{margin:12px 0 0;font-size:12.5px;font-weight:700;color:var(--accent)}
+details.lyr .bi .gap{height:10px}
 details.lyr .lyn{margin:0 12px 8px;font-size:12.5px;color:var(--muted)}
 .perf{font-size:12px;color:var(--muted);margin:0;overflow-wrap:anywhere}
 .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
@@ -109,6 +114,32 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .player .pmsg{margin:0;font-size:12.5px;color:var(--accent)}
 body.playing{padding-bottom:calc(40vh + 40px)}
 details.sec,#recs{scroll-margin-top:calc(70px + env(safe-area-inset-top,0px))}
+/* スマホ：横の余白をつめ、字をひとまわり小さく（縦長になりすぎないように） */
+@media (max-width:600px){
+  body{font-size:14.5px;line-height:1.6;padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+  .wrap{gap:16px}
+  .secbody{gap:10px}
+  ol.program{gap:8px}
+  .card{padding:10px 10px;gap:3px 6px;grid-template-columns:1.5em 1fr;border-radius:10px}
+  .no{font-size:16px}
+  .body{gap:5px}
+  .composer{font-size:12px}
+  .work{font-size:16px;line-height:1.4}
+  .part,.time{font-size:12px}
+  .point,.trivia{font-size:13px;line-height:1.6;padding:6px 8px}
+  .point b,.trivia b{font-size:11px;margin-bottom:0}
+  .links a{font-size:13px;padding:6px 10px}
+  .rate button{font-size:12px;padding:3px 10px}
+  details.lyr{font-size:13px}
+  details.lyr>summary{padding:6px 8px;font-size:12.5px}
+  details.lyr .lyt,details.lyr .bi{padding:0 8px 8px;line-height:1.65}
+  details.lyr .bi .o{font-size:12px;margin-top:4px}
+  details.lyr .bi .sp{margin-top:8px;font-size:12px}
+  details.lyr .bi .gap{height:6px}
+  details.lyr .lyn{margin:0 8px 6px;font-size:12px}
+  .sec-title{font-size:19px}
+  .sec-sub{font-size:12px}
+}
 </style>
 
 <div class="wrap">
@@ -258,7 +289,7 @@ DATA.sections.forEach((s, si) => {
           <p class="work">${esc(t.w)}<br><span class="part">${esc(t.p)}</span>　<span class="time">${t.len}</span></p>
           <p class="point"><b>聴きどころ</b>${esc(t.pt)}</p>
           <p class="trivia"><b>豆知識</b>${esc(t.tr)}</p>
-          ${t.ly ? `<details class="lyr" data-key="${k}"><summary>${t.ly.g ? "歌詞の大意" : "歌詞の訳（全文）"}<span style="font-weight:400;color:var(--muted)">　${esc(t.ly.l||"")}</span></summary></details>` : ""}
+          ${t.ly ? `<details class="lyr" data-key="${k}"><summary>${t.ly.g ? "歌詞の大意" : t.ly.b ? "歌詞の対訳（原文と訳）" : "歌詞の訳（全文）"}<span style="font-weight:400;color:var(--muted)">　${esc(t.ly.l||"")}</span></summary></details>` : ""}
           <p class="perf">動画：${esc(t.ch)}</p>
           <div class="links"><a class="go" href="https://www.youtube.com/watch?v=${t.id}">▶ この曲を聴く</a>${n<keys.length?`<a class="from" href="${listUrl(rest)}">ここから続けて再生</a>`:""}</div>
           <div class="rate" role="group" aria-label="聴いた感想"><span>聴いたら：</span><button type="button" data-r="like" aria-pressed="false">好き</button><button type="button" data-r="ok" aria-pressed="false">ふつう</button><button type="button" data-r="dislike" aria-pressed="false">苦手</button></div>
@@ -274,7 +305,13 @@ DATA.sections.forEach((s, si) => {
 secsEl.addEventListener("toggle", e => {
   const d = e.target; if (!d.classList || !d.classList.contains("lyr") || !d.open || d.dataset.done) return;
   const ly = W[d.dataset.key].ly; d.dataset.done = "1";
-  d.insertAdjacentHTML("beforeend", (ly.n ? `<p class="lyn">${esc(ly.n)}</p>` : "") + `<div class="lyt">${esc(ly.t)}</div>`);
+  const body = ly.b
+    ? `<div class="bi">` + ly.b.map(([o, j]) =>
+        !o && !j ? `<div class="gap"></div>`
+        : o.startsWith("【") && !j ? `<p class="sp">${esc(o)}</p>`
+        : (o ? `<p class="o" lang="${ly.c||""}">${esc(o)}</p>` : "") + (j ? `<p class="j">${esc(j)}</p>` : "")).join("") + `</div>`
+    : `<div class="lyt">${esc(ly.t)}</div>`;
+  d.insertAdjacentHTML("beforeend", (ly.n ? `<p class="lyn">${esc(ly.n)}</p>` : "") + body);
 }, true);
 
 function openFromHash(){ const id = location.hash.slice(1); const el = id && document.getElementById(id); if (el && el.tagName==="DETAILS"){ el.open = true; el.scrollIntoView({block:"start"}); } }
