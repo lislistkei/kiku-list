@@ -1,6 +1,7 @@
 # 聴くリストの元データ
 
-公開ページ：https://amamanogaeru.github.io/kiku-list/ （検索に出ない設定）
+公開ページ：https://lislistkei.github.io/kiku-list/ （検索に出ない設定）
+GitHub：lislistkei/kiku-list（公開用の組織 lislistkei に置いている。2026/11/10 に amamanogaeru から移した）
 
 ## ファイル
 - works.txt / trivia.txt / videos.tsv … クラシックの曲・豆知識・動画
