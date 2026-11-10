@@ -31,6 +31,10 @@ h1{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,7vw,38px);l
 .lead{margin:0;color:var(--muted)}
 .meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
 .search{display:flex;flex-direction:column;gap:6px}
+.mode{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.mode button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:5px 12px;cursor:pointer}
+.mode button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg);font-weight:700}
+.mode small{flex-basis:100%;font-size:12px}
 .search label{font-size:13px;color:var(--muted)}
 .search input{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);width:100%;box-sizing:border-box}
 .search input:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
@@ -159,6 +163,10 @@ details.sec,#recs{scroll-margin-top:calc(70px + env(safe-area-inset-top,0px))}
       <input id="q" type="search" placeholder="さがす" autocomplete="off">
       <div class="hits" id="hits"></div>
     </div>
+    <div class="mode" id="mode" role="group" aria-label="再生のしかた" hidden>
+      <span>▶を押したら：</span><button type="button" data-m="page" aria-pressed="true">このページで再生</button><button type="button" data-m="app" aria-pressed="false">YouTubeアプリで再生</button>
+      <small>画面を消したり、ほかのアプリを使ったりしながら聴くときは「YouTubeアプリで再生」に。</small>
+    </div>
   </header>
 
   <div class="stick">
@@ -197,7 +205,7 @@ details.sec,#recs{scroll-margin-top:calc(70px + env(safe-area-inset-top,0px))}
 
 <div class="player" id="player" hidden>
   <div class="pin">
-    <div class="ph"><span id="ptitle"></span><a id="pyt" href="#">YouTubeで開く</a><button type="button" id="pclose">✕ とじる</button></div>
+    <div class="ph"><span id="ptitle"></span><a id="pyt" href="#">アプリで続きを</a><button type="button" id="pclose">✕ とじる</button></div>
     <p class="pmsg" id="pmsg" hidden></p>
     <div class="pv"><div id="pframe"></div></div>
   </div>
@@ -224,7 +232,8 @@ if (DATA.embed) {
     const i = yt && yt.getPlaylistIndex ? Math.max(0, yt.getPlaylistIndex()) : 0;
     const id = list[i] || list[0];
     ptitle.textContent = list.length > 1 ? `${i + 1}/${list.length}本目：${titleOf(id)}` : titleOf(id);
-    pyt.href = "https://www.youtube.com/watch?v=" + id;
+    const rest = list.slice(i, i + 50);
+    pyt.href = rest.length > 1 ? "https://www.youtube.com/watch_videos?video_ids=" + rest.join(",") : "https://www.youtube.com/watch?v=" + id;
   };
   const onError = () => {
     const i = list.length > 1 && yt.getPlaylistIndex ? Math.max(0, yt.getPlaylistIndex()) : 0;
@@ -253,9 +262,20 @@ if (DATA.embed) {
     } else start();
   }
   function start() { if (list.length > 1) yt.loadPlaylist(list); else yt.loadVideoById(list[0]); }
+  /* 再生のしかた（この端末に覚える）：page＝ページの中で／app＝YouTube（アプリ）で開く */
+  const MK = "play-mode-v1", modeEl = document.getElementById("mode");
+  let mode = (() => { try { return localStorage.getItem(MK) || "page"; } catch { return "page"; } })();
+  const showMode = () => modeEl.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.m === mode)));
+  modeEl.hidden = false; showMode();
+  modeEl.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    mode = b.dataset.m; try { localStorage.setItem(MK, mode); } catch {}
+    showMode();
+    if (mode === "app" && yt && yt.pauseVideo) yt.pauseVideo();
+  });
   document.addEventListener("click", ev => {
     const a = ev.target.closest('a[href^="https://www.youtube.com/watch"]');
-    if (!a || a.id === "pyt") return;
+    if (!a || a.id === "pyt" || mode === "app") return;
     const u = new URL(a.href);
     const ids = u.pathname === "/watch_videos" ? (u.searchParams.get("video_ids") || "").split(",").filter(Boolean) : [u.searchParams.get("v")];
     const playable = ids.filter(x => x && !blocked.has(x));
@@ -304,7 +324,7 @@ DATA.sections.forEach((s, si) => {
           <p class="trivia"><b>豆知識</b>${esc(t.tr)}</p>
           ${t.ly ? `<details class="lyr" data-key="${k}"><summary>${t.ly.g ? "歌詞の大意" : t.ly.b ? "歌詞の対訳（原文と訳）" : "歌詞の訳（全文）"}<span style="font-weight:400;color:var(--muted)">　${esc(t.ly.l||"")}</span></summary></details>` : ""}
           <p class="perf">動画：${esc(t.ch)}</p>
-          <div class="links"><a class="go" href="https://www.youtube.com/watch?v=${t.id}">▶ ここで再生</a>${n<keys.length?`<a class="from" href="${listUrl(rest)}">ここから続けて再生</a>`:""}</div>
+          <div class="links"><a class="go" href="https://www.youtube.com/watch?v=${t.id}">▶ 再生</a>${n<keys.length?`<a class="from" href="${listUrl(rest)}">ここから続けて再生</a>`:""}</div>
           <div class="rate" role="group" aria-label="聴いた感想"><span>聴いたら：</span><button type="button" data-r="like" aria-pressed="false">好き</button><button type="button" data-r="ok" aria-pressed="false">ふつう</button><button type="button" data-r="dislike" aria-pressed="false">苦手</button></div>
         </div></li>`;
     });

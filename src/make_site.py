@@ -15,7 +15,7 @@ def build(src, dst):
     h = (D / src).read_text(encoding='utf-8')
     assert '"kind":' in h
     h = h.replace('"kind":', '"embed":true,"noEmbed":["bVPBABVYsz8"],"kind":', 1)
-    h = h.replace('▶ この曲を聴く', '▶ ここで再生')
+    h = h.replace('▶ この曲を聴く', '▶ 再生')
     h = h.replace('<footer>', '<footer><a href="../">← 聴くリストのトップへ</a>　', 1)
     out = S / dst / 'index.html'
     out.parent.mkdir(parents=True, exist_ok=True)
