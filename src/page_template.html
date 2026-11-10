@@ -59,7 +59,9 @@ ol.program{list-style:none;margin:0;padding:0;display:flex;flex-direction:column
 .point{background:var(--soft);color:var(--ink)}
 .trivia{background:var(--note);color:var(--note-ink)}
 .point b,.trivia b{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;margin-bottom:2px}
-details.lyr{border:1px solid var(--line);border-radius:8px;font-size:14.5px}
+details.lyr,details.about{border:1px solid var(--line);border-radius:8px;font-size:14.5px}
+details.about>summary{cursor:pointer;padding:8px 10px;font-size:13px;font-weight:700;color:var(--ink)}
+details.about .lyt{padding:0 12px 12px;white-space:pre-wrap;line-height:1.8;overflow-wrap:anywhere}
 details.lyr>summary{cursor:pointer;padding:8px 10px;font-size:13px;font-weight:700;color:var(--accent)}
 details.lyr .lyt{padding:0 12px 12px;white-space:pre-wrap;line-height:1.85;overflow-wrap:anywhere}
 details.lyr .bi{padding:0 12px 12px;line-height:1.7;overflow-wrap:anywhere}
@@ -137,7 +139,9 @@ details.sec,#recs{scroll-margin-top:calc(70px + env(safe-area-inset-top,0px))}
   .point b,.trivia b{font-size:11px;margin-bottom:0}
   .links a{font-size:13px;padding:6px 10px}
   .rate button{font-size:12px;padding:3px 10px}
-  details.lyr{font-size:13px}
+  details.lyr,details.about{font-size:13px}
+  details.about>summary{padding:6px 8px;font-size:12.5px}
+  details.about .lyt{padding:0 8px 8px;line-height:1.7}
   details.lyr>summary{padding:6px 8px;font-size:12.5px}
   details.lyr .lyt,details.lyr .bi{padding:0 8px 8px;line-height:1.65}
   details.lyr .bi .o{font-size:12px;margin-top:4px}
@@ -280,7 +284,7 @@ const setToc = open => { tocEl.hidden = !open; tocbtn.setAttribute("aria-expande
 tocbtn.onclick = () => setToc(tocEl.hidden);
 tocEl.addEventListener("click", e => { if (e.target.closest("a")) setToc(false); });
 document.getElementById("totop").onclick = () => { setToc(false); window.scrollTo({top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); };
-const W = DATA.works;
+const W = DATA.works, A = DATA.about || {};
 const listUrl = keys => "https://www.youtube.com/watch_videos?video_ids=" + keys.map(k => (W[k] ? W[k].id : k)).join(",");
 const toSec = s => s.split(":").map(Number).reduce((a,b)=>a*60+b,0);
 const fmtTotal = sec => { const h=Math.floor(sec/3600), m=Math.round(sec%3600/60); return h ? `約${h}時間${m}分` : `約${m}分`; };
@@ -312,6 +316,7 @@ DATA.sections.forEach((s, si) => {
           <p class="work">${esc(t.w)}<br><span class="part">${esc(t.p)}</span>　<span class="time">${t.len}</span></p>
           <p class="point"><b>聴きどころ</b>${esc(t.pt)}</p>
           <p class="trivia"><b>豆知識</b>${esc(t.tr)}</p>
+          ${A[t.c+"|"+t.w] ? `<details class="about" data-a="${esc(t.c+"|"+t.w)}"><summary>作品について<span style="font-weight:400;color:var(--muted)">　${esc(A[t.c+"|"+t.w].y||"")}</span></summary></details>` : ""}
           ${t.ly ? `<details class="lyr" data-key="${k}"><summary>${t.ly.g ? "歌詞の大意" : t.ly.b ? "歌詞の対訳（原文と訳）" : "歌詞の訳（全文）"}<span style="font-weight:400;color:var(--muted)">　${esc(t.ly.l||"")}</span></summary></details>` : ""}
           <p class="perf">動画：${esc(t.ch)}</p>
           <div class="links"><a class="go" href="https://www.youtube.com/watch?v=${t.id}">▶ この曲を聴く</a>${DATA.embed?`<a class="ytb" data-yt href="https://www.youtube.com/watch?v=${t.id}">YouTubeで</a>`:""}${n<keys.length?`<a class="from" href="${listUrl(rest)}">ここから続けて再生</a>`:""}</div>
@@ -326,7 +331,13 @@ DATA.sections.forEach((s, si) => {
 
 /* 歌詞の訳は、開いたときに中身を入れる（ページを軽くするため） */
 secsEl.addEventListener("toggle", e => {
-  const d = e.target; if (!d.classList || !d.classList.contains("lyr") || !d.open || d.dataset.done) return;
+  const d = e.target; if (!d.classList || !d.open || d.dataset.done) return;
+  if (d.classList.contains("about")) {
+    d.dataset.done = "1";
+    d.insertAdjacentHTML("beforeend", `<div class="lyt">${esc(A[d.dataset.a].s)}</div><button type="button" class="fold">▲ たたむ</button>`);
+    return;
+  }
+  if (!d.classList.contains("lyr")) return;
   const ly = W[d.dataset.key].ly; d.dataset.done = "1";
   const body = ly.b
     ? `<div class="bi">` + ly.b.map(([o, j]) =>

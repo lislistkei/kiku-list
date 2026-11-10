@@ -95,7 +95,13 @@ for sid, title, lead, groups in S:
 assert not (set(W) - used), set(W) - used
 
 works = {k: dict(**W[k], id=V[k]['id'], len=V[k]['len'], ch=V[k]['ch']) for k in W}
-data = json.dumps(dict(works=works, sections=sections, kind='オペラ',
+# 作品の説明（about/o*.json：「作曲家|作品」→ {y: 年などの1行, s: 本文}）
+ABOUT = {}
+for f in sorted((D/'about').glob('o[0-9]*.json')):
+    ABOUT.update(json.loads(f.read_text(encoding='utf-8')))
+ABOUT = {a: v for a, v in ABOUT.items() if any(w['c'] + '|' + w['w'] == a for w in works.values())}
+print('about', len(ABOUT), 'of', len({w['c'] + '|' + w['w'] for w in works.values()}))
+data = json.dumps(dict(works=works, sections=sections, about=ABOUT, kind='オペラ',
                        weakSections=['intro', 'voices', 'movies', 'singers'], stapleSections=['intro', 'movies']),
                   ensure_ascii=False, separators=(',', ':'))
 TIPS = '''<h2>オペラの聴き方のコツ（教本より）</h2>

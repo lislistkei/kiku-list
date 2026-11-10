@@ -129,7 +129,13 @@ unused = set(W) - used
 assert not unused, unused
 
 works = {k: dict(c=W[k]['c'], w=W[k]['w'], p=W[k]['p'], pt=W[k]['pt'], tr=T[k], id=V[k]['id'], len=V[k]['len'], ch=V[k]['ch']) for k in W}
-data = json.dumps(dict(works=works, sections=sections, kind='クラシック', weakSections=['intro', 'seasons', 'highlights', 'anokyoku'], stapleSections=['intro', 'highlights', 'anokyoku']), ensure_ascii=False, separators=(',', ':'))
+# 作品の説明（about/c*.json：「作曲家|作品」→ {y: 年などの1行, s: 本文}）
+ABOUT = {}
+for f in sorted((D/'about').glob('c[0-9]*.json')):
+    ABOUT.update(json.loads(f.read_text(encoding='utf-8')))
+ABOUT = {a: v for a, v in ABOUT.items() if any(w['c'] + '|' + w['w'] == a for w in works.values())}
+print('about', len(ABOUT), 'of', len({w['c'] + '|' + w['w'] for w in works.values()}))
+data = json.dumps(dict(works=works, sections=sections, about=ABOUT, kind='クラシック', weakSections=['intro', 'seasons', 'highlights', 'anokyoku'], stapleSections=['intro', 'highlights', 'anokyoku']), ensure_ascii=False, separators=(',', ':'))
 tpl = (D/'page_template.html').read_text(encoding='utf-8')
 TIPS = '''<h2>聴き方のコツ（教本13-4より）</h2>
     <ul>
