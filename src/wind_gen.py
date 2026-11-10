@@ -16,44 +16,46 @@ for l in (D/'wind_videos.tsv').read_text(encoding='utf-8').splitlines():
 S = [
  ('intro', '入門の12曲', 'まずはここから。マーチ、吹奏楽のための名曲、ポップスを少しずつ', [
    ['', 'stars bogey kameraden olympic holst1 armenian alvamar fumon tanabata takarajima raiders african']]),
- ('march-world', 'マーチ（世界の行進曲）', 'アメリカのマーチ王スーザから、ヨーロッパの軍楽隊、映画のマーチまで', [
-   ['「マーチ王」スーザ', 'stars washington liberty semper thunderer capitan'],
-   ['アメリカのマーチ', 'emblem barnum lassus anchors amsalute'],
-   ['イギリスのマーチ', 'bogey crown dambusters seasongs'],
-   ['ドイツ・オーストリア・チェコ', 'kameraden doppeladler preussens florentiner gladiators'],
-   ['フランス・ベルギー', 'sambre arsenal'],
-   ['映画のマーチ', 'raiders imperial greatescape']]),
+ ('march-world', 'マーチ（世界の行進曲）', 'アメリカのマーチ王スーザから、ヨーロッパの軍楽隊、スペインのパソ・ドブレ、映画のマーチまで', [
+   ['「マーチ王」スーザ', 'stars washington liberty semper thunderer capitan kingcotton handsacross manhattan cadets invincible blackhorse'],
+   ['アメリカのマーチ', 'emblem barnum lassus americanswe onthemall patrol anchors amsalute'],
+   ['イギリスのマーチ', 'bogey pomp1 crown orb dambusters knightsbridge seasongs'],
+   ['ドイツ・オーストリア・チェコ・ロシア', 'kameraden doppeladler radetzky preussens gladiatoren florentiner gladiators slavianka'],
+   ['フランス・ベルギー・スペイン・イタリア', 'sambre arsenal espana amparito aidamarch'],
+   ['映画とオリンピックのマーチ', 'raiders imperial superman greatescape longestday olyfanfare']]),
  ('march-japan', 'マーチ（日本の行進曲）', '式典やスポーツでおなじみの名曲と、コンクール課題曲のマーチ', [
-   ['日本の名行進曲', 'gunkan olympic sportsshow shukuten akizorani'],
-   ['コンクール課題曲のマーチ（年の順）', 'takeoff kten haruka kibou aprilleaf bluespring']]),
+   ['日本の名行進曲', 'gunkan olympic sportsshow shukuten ozora eikan akizorani'],
+   ['コンクール課題曲のマーチ（年の順）', 'takeoff marine catalonia turnbull shiokemuri kten haruka streetperf kibou harukazemichi aprilleaf bluespring kirameki pegasus yuuki memories marcha']]),
  ('roots', '吹奏楽のルーツ', '吹奏楽が生まれる前から、管楽器のための名曲があった', [
    ['', 'fireworks granpartita dvserenade rsserenade gounod berlioz']]),
  ('classics', '吹奏楽の古典（イギリス・アメリカ）', '「吹奏楽のための芸術作品」のはじまり', [
    ['イギリス：ホルストとヴォーン・ウィリアムズ', 'holst1 holst2 hammersmith folksong toccata'],
-   ['イギリス：グレインジャー', 'lincoln irish shepherd'],
-   ['アメリカで生まれた古典', 'schoenberg milhaud hindemith']]),
+   ['イギリス：グレインジャーとジェイコブ', 'lincoln irish shepherd byrd'],
+   ['アメリカで生まれた古典', 'schoenberg milhaud hindemith shaker']]),
  ('modern', '現代の名曲（アメリカ・ヨーロッパ）', '日本の吹奏楽部でもおなじみの作曲家たち', [
-   ['アルフレッド・リード', 'armenian elcamino russianxmas festprelude'],
+   ['アルフレッド・リード', 'armenian elcamino russianxmas festprelude hounds punchinello'],
    ['ジェイムズ・バーンズ', 'alvamar barnes3'],
    ['アメリカの名曲', 'festvar eternal korean hymnsong shenandoah blueshades october ride candide'],
-   ['ヨーロッパの名曲', 'dragon dancemov harrison lotr oregon spartacus']]),
+   ['今のアメリカの人気作曲家（ティケリ・マッキー・ウィテカー）', 'cajun vesuvius asphalt aurora sleep'],
+   ['ヨーロッパの名曲', 'dragon dancemov orient harrison lotr oregon spartacus puszta']]),
  ('japan', '日本の吹奏楽', '日本の作曲家が書いた名曲。祭りや神話を描いた曲も', [
-   ['名作の数々', 'passacaglia osaka shinwa gururi japonisme tanabata kushinada'],
+   ['名作の数々', 'passacaglia osaka shinwa gururi japonisme tanabata kushinada magellan hinoboru fuyou gr'],
    ['コンクール課題曲の名曲', 'fumon kazenomai discokid']]),
  ('pops', 'ポップス・映画音楽', '演奏会のアンコールや野球の応援でおなじみ', [
-   ['ポップス', 'takarajima omens african cumbanchero singsing discokid lupin'],
-   ['映画音楽', 'starwars raiders imperial morricone']]),
+   ['ポップス', 'takarajima omens african cumbanchero mambo5 september jounetsu discokid lupin'],
+   ['ジャズ（スウィング）', 'singsing inthemood moonlight'],
+   ['映画音楽', 'starwars raiders imperial superman pirates morricone']]),
  ('arrange', 'クラシックの編曲もの', 'オーケストラの名曲を吹奏楽で。コンクールの自由曲の定番', [
-   ['', 'feste pini daphnis candide']]),
+   ['', 'feste pini daphnis firebird kiev sabre candide']]),
  ('kadai', '全日本吹奏楽コンクールの課題曲', '毎年えらばれる課題曲から、名曲・人気曲（年の順）', [
-   ['', 'shukuten discokid takeoff fumon kten kazenomai haruka kibou aprilleaf bluespring']]),
+   ['', 'shukuten discokid takeoff fumon marine catalonia turnbull shiokemuri kten kazenomai haruka streetperf kibou harukazemichi aprilleaf bluespring kirameki pegasus yuuki memories marcha']]),
  ('scenes', '「あの曲」の正体', '運動会、野球の応援、テレビ、サーカスで聴いたあの曲', [
-   ['野球の応援・運動会', 'african cumbanchero takarajima lupin olympic sportsshow'],
-   ['テレビ・映画・サーカス', 'liberty bogey gladiators gunkan greatescape']]),
+   ['野球の応援・運動会', 'african cumbanchero takarajima lupin eikan olympic sportsshow sabre longestday'],
+   ['テレビ・映画・サーカス・サッカー', 'liberty bogey gladiators gunkan greatescape jounetsu aidamarch radetzky']]),
  ('instruments', '楽器別 この楽器が活躍する曲', '好きな楽器から探す', [
    ['ピッコロ', 'stars florentiner'], ['クラリネット', 'blueshades granpartita'], ['サックス', 'takarajima singsing'],
-   ['ホルン', 'festvar rsserenade'], ['トランペット', 'raiders cumbanchero'], ['トロンボーン', 'lassus stars'],
-   ['ユーフォニアム・チューバ（低音）', 'doppeladler emblem'], ['打楽器', 'cumbanchero gururi'], ['鐘（チャイム）', 'liberty russianxmas']]),
+   ['ホルン', 'festvar rsserenade firebird'], ['トランペット', 'raiders cumbanchero'], ['トロンボーン', 'lassus stars'],
+   ['ユーフォニアム・チューバ（低音）', 'doppeladler emblem'], ['打楽器', 'cumbanchero gururi vesuvius sabre'], ['鐘（チャイム）', 'liberty russianxmas']]),
 ]
 
 used = set(); sections = []
