@@ -157,10 +157,12 @@ details.sec,#recs{scroll-margin-top:calc(70px + env(safe-area-inset-top,0px))}
   .sec-title{font-size:19px}
   .sec-sub{font-size:12px}
 }
+.backtop{display:inline-block;margin-bottom:10px;font-size:14px;font-weight:700;color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 14px}
 </style>
 
 <div class="wrap">
   <header>
+    <a class="backtop" href="../">← 選択画面にもどる</a>
     <div class="eyebrow">吹奏楽の名曲とマーチを、YouTubeで</div>
     <h1>吹奏楽 聴くリスト</h1>
     <p class="lead">マーチを中心に、吹奏楽のための名曲、コンクールの課題曲、ポップスまで。曲ごとに「聴きどころ」と豆知識つき。見出しをタップすると開きます。</p>
@@ -179,6 +181,7 @@ details.sec,#recs{scroll-margin-top:calc(70px + env(safe-area-inset-top,0px))}
   <div class="stick">
     <div class="barrow">
       <button type="button" id="tocbtn" aria-expanded="false" aria-controls="toc">☰ 目次をひらく</button>
+      <a href="../" aria-label="選択画面にもどる" title="選択画面にもどる">⌂</a>
       <a href="#recs">おすすめ</a>
       <button type="button" id="totop">▲ 上へ</button>
     </div>

@@ -17,6 +17,11 @@ def build(src, dst):
     h = h.replace('"kind":', '"embed":true,"noEmbed":["bVPBABVYsz8"],"kind":', 1)
     h = h.replace('▶ この曲を聴く', '▶ 再生')
     h = h.replace('<footer>', '<footer><a href="../">← 聴くリストのトップへ</a>　', 1)
+    # 選択画面（トップ）へ戻るボタン：ページの頭と、上に残るバーの2か所
+    h = h.replace('<div class="eyebrow">', '<a class="backtop" href="../">← 選択画面にもどる</a>\n    <div class="eyebrow">', 1)
+    h = h.replace('<a href="#recs">おすすめ</a>', '<a href="../" aria-label="選択画面にもどる" title="選択画面にもどる">⌂</a>\n      <a href="#recs">おすすめ</a>', 1)
+    h = h.replace('</style>', '.backtop{display:inline-block;margin-bottom:10px;font-size:14px;font-weight:700;color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 14px}\n</style>', 1)
+    assert h.count('class="backtop"') == 1 and h.count('aria-label="選択画面にもどる"') == 1
     out = S / dst / 'index.html'
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(HEAD + h + TAIL, encoding='utf-8')
