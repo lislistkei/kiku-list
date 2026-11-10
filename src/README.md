@@ -20,3 +20,9 @@ GitHub：lislistkei/kiku-list（公開用の組織 lislistkei に置いている
 ## 作り直し方
 src の中身を1つのフォルダに置き、`python gen.py` → `python opera_gen.py` → `python make_site.py` の順に実行。
 できた site/ の中身（index.html, classical/, opera/）をこのリポジトリに入れて push する。
+
+## 次にやること（2026/11/10 時点）
+- 吹奏楽版の聴くリストを作る（クラシック・オペラと同じ形の3つめのページ wind/。トップの index.html にもカードを足す）。
+  - 曲を何から選ぶか（教本があるか、コンクールの定番・課題曲・オリジナル曲・編曲ものの割合など）は、作り始める前にのんさんに聞く。
+  - 今のページにあるしくみ（作品について・たたむボタン・YouTubeで ボタン・再生のしかた切りかえ・スマホ用の小さめの字）は、page_template.html をそのまま使えば入る。
+  - 公開先は組織 lislistkei（https://lislistkei.github.io/kiku-list/）。手伝い役を同時にたくさん動かすワークフローは、使う前にのんさんに確認する。
