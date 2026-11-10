@@ -9,6 +9,15 @@ for l in (D/'opera_works.txt').read_text(encoding='utf-8').splitlines():
     k, comp, work, part, q, rng, point, trivia = l.split('|')
     W[k] = dict(c=comp, w=work, p=part, pt=point, tr=trivia)
 for k, v in json.loads((D/'rewrite'/'points.json').read_text(encoding='utf-8'))['オペラ'].items(): W[k]['pt'] = v
+# 歌詞の訳（lyrics/part*.json は全文訳、gist.json は著作権が残る曲の大意）
+LY = {}
+for f in sorted((D/'lyrics').glob('part*.json')) + [D/'lyrics'/'gist.json']:
+    for k, v in json.loads(f.read_text(encoding='utf-8')).items():
+        assert k in W, ('lyrics: no work', k, f.name)
+        LY[k] = dict(t=v['t'].strip(), l=v.get('lang', ''), n=v.get('note', ''), **({'g': 1} if v.get('g') else {}))
+for alias, base in {'callas-casta': 'norma', 'three-nessun': 'tur-nessun', 'pavarotti-pira': 'trov-pira'}.items():
+    if base in LY: LY[alias] = LY[base]
+for k, v in LY.items(): W[k]['ly'] = v
 V = {}
 for l in (D/'opera_videos.tsv').read_text(encoding='utf-8').splitlines():
     if not l.strip(): continue
@@ -96,4 +105,4 @@ html = (tpl.replace('__TITLE__', 'オペラ教本 聴くリスト')
            .replace('曲名・作曲家・ことばで探す（例：ショパン、運動会、のだめ）', '作品名・作曲家・ことばで探す（例：椿姫、プッチーニ、映画）')
            .replace('__DATA__', data))
 (D/'opera-playlist.html').write_text(html, encoding='utf-8')
-print('works', len(works), 'cards', sum(len(g[1]) for s in sections for g in s['g']), 'sections', len(sections))
+print('lyrics', len(LY), 'works', len(works), 'cards', sum(len(g[1]) for s in sections for g in s['g']), 'sections', len(sections))
