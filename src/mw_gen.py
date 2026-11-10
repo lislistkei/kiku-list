@@ -27,8 +27,11 @@ S = [
  ('intro', '入門の12曲', 'まずはここから。ウィーンのワルツ、行進曲の王様、バレエのワルツ、日本のマーチまで', [
    ['', 'c:danube c:radetzky w:stars skaters c:flowers c:minute c:pomp o:aida-march w:bogey w:olympic c:sleeping c:wedding']]),
  ('waltz-vienna', 'ワルツ（ウィーンのワルツ）', '「ワルツ王」シュトラウス一家と、ウィーンのオペレッタ', [
-   ['「ワルツ王」ヨハン・シュトラウス2世', 'c:danube c:kaiserwalzer c:fruhling vblut wald wein rosensud kuenstler accel morgen tausend schatz'],
-   ['シュトラウス家と仲間たち', 'lanner c:sphaeren dorfschwalben delirien dynamiden weanermadln'],
+   ['「ワルツ王」ヨハン・シュトラウス2世（まずはこれ）', 'c:danube c:kaiserwalzer c:fruhling vblut wald wein rosensud kuenstler'],
+   ['「ワルツ王」ヨハン・シュトラウス2世（もっと聴きたい人に）', 'accel morgen tausend schatz bonbons freut zitronen nordsee millionen'],
+   ['父シュトラウスとランナー（ウィンナ・ワルツのはじまり）', 'lorelei lanner hofball'],
+   ['弟ヨーゼフ・シュトラウス', 'c:sphaeren dorfschwalben delirien dynamiden lebenslauf aquarellen'],
+   ['シュトラウスのあとの時代（ツィーラー）', 'weanermadln wienerburger'],
    ['オペレッタのワルツ', 'o:fledermaus goldsilber merrywaltz']]),
  ('waltz-world', 'ワルツ（バレエとオーケストラ）', 'フランス、メキシコ、ロシアへ。バレエの舞踏会から、ちょっと怖いワルツまで', [
    ['世界で愛されるワルツ', 'skaters estudiantina olas danubewaves'],
@@ -48,7 +51,8 @@ S = [
  ('funeral', '葬送の行進曲', 'ゆっくり重い足どりの「お葬式の行進曲」。交響曲の中の名曲が多い', [
    ['', 'c:funeral eroica2 o:ring-funeral mahler5 c:ma1 scaffold']]),
  ('march-world', 'マーチ（吹奏楽・世界の行進曲）', 'アメリカのマーチ王スーザから、ヨーロッパの軍楽隊、映画のマーチまで', [
-   ['「マーチ王」スーザ', 'w:stars w:washington w:liberty w:semper w:thunderer w:capitan w:kingcotton w:handsacross w:manhattan w:cadets w:invincible w:blackhorse fairest fieldartillery'],
+   ['「マーチ王」スーザ（まずはこれ）', 'w:stars w:washington w:liberty w:semper w:thunderer w:capitan w:kingcotton w:handsacross w:manhattan w:cadets w:invincible w:blackhorse'],
+   ['「マーチ王」スーザ（もっと聴きたい人に・年の順）', 'gladiator libertyspirit diplomat freelance fairest gloryyankee fieldartillery sabrespurs gallant7 nobles wolverines welch'],
    ['アメリカのマーチ', 'grays w:emblem w:barnum w:lassus w:americanswe w:onthemall w:patrol w:anchors w:amsalute'],
    ['イギリスのマーチ', 'w:bogey quarterdeck w:crown w:orb w:dambusters w:knightsbridge w:seasongs'],
    ['ドイツ・オーストリア・チェコ・ロシア', 'w:kameraden w:doppeladler yorck w:preussens w:gladiatoren w:florentiner w:gladiators w:slavianka'],
