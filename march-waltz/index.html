@@ -54,7 +54,8 @@ details[open] .sec-title::before{content:"－"}
 h3.grp{font-family:var(--f-display);font-weight:600;font-size:17px;margin:6px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
 h3.grp a{font-family:var(--f-body);font-size:13px;font-weight:500;color:var(--accent);text-decoration:none}
 ol.program{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:2em 1fr;gap:4px 10px}
+.card.pinpoint{outline:3px solid var(--accent);outline-offset:2px}
+.card{scroll-margin-top:calc(64px + env(safe-area-inset-top,0px));background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:2em 1fr;gap:4px 10px}
 .no{font-family:var(--f-display);font-weight:800;font-size:20px;color:var(--accent);line-height:1.35;font-variant-numeric:tabular-nums}
 .body{min-width:0;display:flex;flex-direction:column;gap:6px}
 .composer{font-size:13px;color:var(--muted);letter-spacing:.04em}
@@ -346,6 +347,15 @@ DATA.sections.forEach((s, si) => {
   secsEl.appendChild(d);
 });
 
+/* 1曲ずつのリンク先（#k-キー）。同じ曲が何か所かにあるときは、入門・「あの曲」などではない章のほうにつける（教本からのリンク用） */
+{ const pick = {};
+  document.querySelectorAll("details.sec").forEach(sec => {
+    const weak = (DATA.weakSections || []).includes(sec.id);
+    sec.querySelectorAll(".card").forEach(c => { const k = c.dataset.key, p = pick[k]; if (!p || (p.weak && !weak)) pick[k] = {c, weak}; });
+  });
+  Object.entries(pick).forEach(([k, {c}]) => { c.id = "k-" + k; });
+}
+
 /* 歌詞の訳は、開いたときに中身を入れる（ページを軽くするため） */
 secsEl.addEventListener("toggle", e => {
   const d = e.target; if (!d.classList || !d.open || d.dataset.done) return;
@@ -372,7 +382,15 @@ secsEl.addEventListener("click", e => {
   d.scrollIntoView({block: "start"});
 });
 
-function openFromHash(){ const id = location.hash.slice(1); const el = id && document.getElementById(id); if (el && el.tagName==="DETAILS"){ el.open = true; el.scrollIntoView({block:"start"}); } }
+function openFromHash(){
+  const id = decodeURIComponent(location.hash.slice(1)); const el = id && document.getElementById(id); if (!el) return;
+  if (el.tagName === "DETAILS") { el.open = true; el.scrollIntoView({block:"start"}); return; }
+  if (el.classList.contains("card")) {           // 教本などから1曲を指定して開いたとき
+    const sec = el.closest("details.sec"); if (sec) sec.open = true;
+    el.scrollIntoView({block:"center"});
+    el.classList.add("pinpoint"); setTimeout(() => el.classList.remove("pinpoint"), 4000);
+  }
+}
 window.addEventListener("hashchange", openFromHash); openFromHash();
 
 const q = document.getElementById("q"), hits = document.getElementById("hits");
