@@ -17,16 +17,21 @@ GitHub：lislistkei/kiku-list（公開用の組織 lislistkei に置いている
   - 日本の課題曲・作曲者名・年は、YouTube の動画タイトルや説明文で確かめてから書いた（記憶だけで書くとまちがえやすい）
   - 動画は公式の楽団（米海兵隊バンド・東京佼成WO・自衛隊や海上保安庁の音楽隊・洗足学園など）を優先。153本すべて埋めこみ可を確認ずみ（2026/11/10）
 - about/w_src.py → about/w1.json … 吹奏楽の「作品について」（python about/w_src.py で作る。自信のない年は書かない）
+- mw_works.txt / mw_videos.tsv … マーチとワルツ版で新しく足した曲（61曲。2026/11/10〜11）。形は wind_works.txt と同じ
+- mw_gen.py … マーチとワルツ版（march-waltz/）を作る。クラシック・オペラ・吹奏楽の3ページの HTML から曲を借りてきて（c:・o:・w: をつけたキー）、新しい曲と合わせる。だから gen.py・opera_gen.py・wind_gen.py のあとに実行する
+  - 新しい曲の動画は YouTube の検索で探し、埋めこみ可（oembed で確認）のものを、公式の楽団・レーベルを優先して選んだ
 - page_template.html … ページのひな形（目次・好き嫌い・おすすめ・埋めこみ再生）
 - gen.py / opera_gen.py / wind_gen.py … Claudeのページ用 HTML を作る
 - make_site.py … 公開用（site/）の HTML を作る
 
 ## 作り直し方
-src の中身を1つのフォルダに置き、`python gen.py` → `python opera_gen.py` → `python wind_gen.py` → `python make_site.py` の順に実行。
-できた site/ の中身（index.html, classical/, opera/, wind/）をこのリポジトリに入れて push する。
+src の中身を1つのフォルダに置き、`python gen.py` → `python opera_gen.py` → `python wind_gen.py` → `python mw_gen.py` → `python make_site.py` の順に実行。
+できた site/ の中身（index.html, classical/, opera/, wind/, march-waltz/）をこのリポジトリに入れて push する。
 
 ## 次にやること（2026/11/10 時点）
 - 吹奏楽版（wind/）を作った。のんさんの希望で「バランスよく・約100曲・マーチ多め」。
 - 同じ日に「もっと増やして」で153曲に（足した58曲のうちマーチ34曲。2023〜2026年度の課題曲マーチも入れた）。
 - 選択画面へ戻るボタンは make_site.py で足している（ページの頭の「← 選択画面にもどる」と、上のバーの「⌂」）。
 - 吹奏楽版の動画の差しかえ・曲の追加は、のんさんが聴いてみた感想を聞いてから。
+- 2026/11/11：のんさんの希望「マーチとワルツは好きだから横断的に独立させたい、曲数も増やしたい」で、4つ目のページ「マーチとワルツ」（march-waltz/）を作った。161曲（ワルツ53・マーチ108）・10のリスト。うち61曲は新しく足した曲（ウィーンのワルツ、バレエ・ピアノ・オペラのワルツ、オーケストラの行進曲、葬送行進曲、スーザなどのマーチ、抜刀隊・君が代行進曲）。元の3ページはそのまま
+  - 新しい曲の「作品について」はまだない（借りてきた曲には元のページの説明がつく）。豆知識は自信のあることだけ書いた

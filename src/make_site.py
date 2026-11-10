@@ -29,6 +29,7 @@ def build(src, dst):
 build('classical-playlist.html', 'classical')
 build('opera-playlist.html', 'opera')
 build('wind-playlist.html', 'wind')
+build('mw-playlist.html', 'march-waltz')
 
 (S / 'index.html').write_text(HEAD + '''<title>聴くリスト</title>
 <style>
@@ -48,6 +49,7 @@ a.card b{display:block;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font
   <a class="card" href="classical/"><b>クラシック</b>308曲・15のリスト</a>
   <a class="card" href="opera/"><b>オペラ</b>157の名場面・12のリスト</a>
   <a class="card" href="wind/"><b>吹奏楽</b>153曲（マーチ70曲）・12のリスト</a>
+  <a class="card" href="march-waltz/"><b>マーチとワルツ</b>161曲（ワルツ53曲・マーチ108曲）・10のリスト<br><span style="font-size:13px;color:var(--muted)">3つのリストから行進曲とワルツだけを集め、新しい曲も足しました</span></a>
   <p style="font-size:12px">好き嫌いの記録は、この端末の中だけに保存されます。</p>
 </main>''' + TAIL, encoding='utf-8')
 (S / '.nojekyll').write_text('', encoding='utf-8')
