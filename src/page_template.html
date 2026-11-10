@@ -1,0 +1,428 @@
+<title>__TITLE__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* 演奏会のプログラム冊子：表紙 → 章の目次（チップ）→ 章ごとの曲目（番号・楽章・演奏時間）→ 豆知識 */
+:root{
+  --bg:#f6f4f0; --paper:#ffffff; --ink:#1d2433; --muted:#5f6675;
+  --line:#e1ddd4; --accent:#8a2433; --accent-ink:#ffffff; --soft:#f3e7e8; --note:#f4efe2; --note-ink:#5b4a1f;
+  --f-display:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#15171d; --paper:#1e2129; --ink:#ecebe7; --muted:#a6a9b3; --line:#2f333d;
+  --accent:#e0798a; --accent-ink:#1a1014; --soft:#3a2328; --note:#2a2619; --note-ink:#e6d7a8; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#15171d; --paper:#1e2129; --ink:#ecebe7; --muted:#a6a9b3; --line:#2f333d;
+  --accent:#e0798a; --accent-ink:#1a1014; --soft:#3a2328; --note:#2a2619; --note-ink:#e6d7a8; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.7;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-size:12px;letter-spacing:.12em;color:var(--muted)}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,7vw,38px);line-height:1.3;margin:0;text-wrap:balance}
+.lead{margin:0;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.search{display:flex;flex-direction:column;gap:6px}
+.search label{font-size:13px;color:var(--muted)}
+.search input{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);width:100%;box-sizing:border-box}
+.search input:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.hits{font-size:13px;color:var(--muted);min-height:1.2em}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px}
+nav.toc a{font-size:13px;text-decoration:none;color:var(--ink);border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:5px 12px}
+details.sec{background:transparent;border-top:1px solid var(--line);padding-top:6px}
+details.sec>summary{cursor:pointer;list-style:none;display:flex;flex-direction:column;gap:2px;padding:10px 0}
+details.sec>summary::-webkit-details-marker{display:none}
+.sec-title{font-family:var(--f-display);font-weight:600;font-size:22px;display:flex;align-items:baseline;gap:10px}
+.sec-title::before{content:"＋";font-family:var(--f-body);font-size:16px;color:var(--accent);width:1em;display:inline-block}
+details[open] .sec-title::before{content:"－"}
+.sec-sub{font-size:13px;color:var(--muted);padding-left:1.6em}
+.secbody{display:flex;flex-direction:column;gap:14px;padding-bottom:18px}
+.playall{display:flex;flex-wrap:wrap;gap:8px}
+.playall a{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:700;font-size:15px;padding:10px 14px;border-radius:10px}
+h3.grp{font-family:var(--f-display);font-weight:600;font-size:17px;margin:6px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+h3.grp a{font-family:var(--f-body);font-size:13px;font-weight:500;color:var(--accent);text-decoration:none}
+ol.program{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:2em 1fr;gap:4px 10px}
+.no{font-family:var(--f-display);font-weight:800;font-size:20px;color:var(--accent);line-height:1.35;font-variant-numeric:tabular-nums}
+.body{min-width:0;display:flex;flex-direction:column;gap:6px}
+.composer{font-size:13px;color:var(--muted);letter-spacing:.04em}
+.work{font-family:var(--f-display);font-weight:600;font-size:18px;line-height:1.45;margin:0}
+.part{display:inline-block;font-family:var(--f-body);font-size:13px;font-weight:500;background:var(--soft);color:var(--ink);padding:1px 8px;border-radius:6px;margin-top:3px}
+.time{font-family:var(--f-body);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.point,.trivia{margin:0;font-size:14.5px;border-radius:8px;padding:8px 10px}
+.point{background:var(--soft);color:var(--ink)}
+.trivia{background:var(--note);color:var(--note-ink)}
+.point b,.trivia b{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;margin-bottom:2px}
+.perf{font-size:12px;color:var(--muted);margin:0;overflow-wrap:anywhere}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.links a{font-size:14px;text-decoration:none;border-radius:8px;padding:7px 12px;font-weight:700}
+.links a.go{background:var(--ink);color:var(--bg)}
+.links a.from{border:1px solid var(--line);color:var(--ink);font-weight:500}
+a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.rate{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.rate span{font-size:12px;color:var(--muted)}
+.rate button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:4px 12px;cursor:pointer}
+.rate button[aria-pressed="true"][data-r="like"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.rate button[aria-pressed="true"][data-r="ok"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.rate button[aria-pressed="true"][data-r="dislike"]{background:var(--muted);border-color:var(--muted);color:var(--bg)}
+.rate button:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.recs{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.recs h2{font-family:var(--f-display);font-weight:600;font-size:20px;margin:0}
+.recs .stat{font-size:14px;color:var(--muted);margin:0}
+.recs ol{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:8px}
+.recs li{font-size:15px}
+.recs li small{display:block;color:var(--muted);font-size:13px}
+.recs li a{color:var(--accent);font-weight:700;text-decoration:none}
+.recs .btns{display:flex;flex-wrap:wrap;gap:8px}
+.recs .btns a,.recs .btns button{font:inherit;font-size:14px;font-weight:700;border-radius:10px;padding:9px 14px;text-decoration:none;cursor:pointer}
+.recs .btns a{background:var(--accent);color:var(--accent-ink);border:0}
+.recs .btns button{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.recs .note{font-size:12px;color:var(--muted);margin:0}
+.tips{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px}
+.tips h2{font-family:var(--f-display);font-weight:600;font-size:19px;margin:0}
+.tips ul{margin:6px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+footer{font-size:12px;color:var(--muted)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:16;background:var(--bg)}
+.stick{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:var(--bg);border-bottom:1px solid var(--line);
+  padding-block:8px;display:flex;flex-direction:column;gap:8px}
+.barrow{display:flex;gap:8px;align-items:center}
+.barrow button,.barrow a{font:inherit;font-size:14px;font-weight:700;border-radius:999px;padding:8px 14px;cursor:pointer;text-decoration:none;white-space:nowrap}
+#tocbtn{background:var(--ink);color:var(--bg);border:0;flex:1 1 auto;text-align:left}
+.barrow a,#totop{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.barrow button:focus-visible,.barrow a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.stick nav.toc{max-height:55vh;overflow-y:auto;padding-bottom:4px}
+[hidden]{display:none!important}
+.player{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--paper);border-top:1px solid var(--line);
+  box-shadow:0 -4px 16px rgba(0,0,0,.18);padding:8px max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.player .pin{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
+.player .ph{display:flex;align-items:center;gap:8px;font-size:13px}
+.player .ph span{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.player .ph a,.player .ph button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:4px 10px;text-decoration:none;cursor:pointer;white-space:nowrap}
+.player .pv{position:relative;width:100%;aspect-ratio:16/9;max-height:34vh;background:#000;border-radius:8px;overflow:hidden}
+.player iframe,.player #pframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.player .pmsg{margin:0;font-size:12.5px;color:var(--accent)}
+body.playing{padding-bottom:calc(40vh + 40px)}
+details.sec,#recs{scroll-margin-top:calc(70px + env(safe-area-inset-top,0px))}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">__EYEBROW__</div>
+    <h1>__TITLE__</h1>
+    <p class="lead">__LEAD__</p>
+    <div class="meta"><span id="m-works">—曲</span><span id="m-secs">—のリスト</span><span>公式チャンネルを中心に選曲</span></div>
+    <div class="search">
+      <label for="q">曲名・作曲家・ことばで探す（例：ショパン、運動会、のだめ）</label>
+      <input id="q" type="search" placeholder="さがす" autocomplete="off">
+      <div class="hits" id="hits"></div>
+    </div>
+  </header>
+
+  <div class="stick">
+    <div class="barrow">
+      <button type="button" id="tocbtn" aria-expanded="false" aria-controls="toc">☰ 目次をひらく</button>
+      <a href="#recs">おすすめ</a>
+      <button type="button" id="totop">▲ 上へ</button>
+    </div>
+    <nav class="toc" id="toc" aria-label="章の目次" hidden></nav>
+  </div>
+
+  <section class="recs" id="recs" aria-live="polite">
+    <h2>あなたへのおすすめ</h2>
+    <p class="stat" id="r-stat">聴いた曲に「好き・ふつう・苦手」をつけると、ここに次のおすすめが出ます。</p>
+    <ol id="r-list"></ol>
+    <div class="btns" id="r-btns"></div>
+    <div id="ai-out"></div>
+    <p class="note" id="r-note"></p>
+  </section>
+
+  <main id="secs"></main>
+
+  <section class="tips">
+    __TIPS__
+  </section>
+
+  <footer>動画はYouTubeの各チャンネルのものです。消されたり、見られなくなったりすることがあります。「動画：」のあとはチャンネル名です。豆知識の逸話には、言い伝えで真偽がはっきりしないものもあります（「〜と伝えられる」と書いたもの）。</footer>
+</div>
+
+<div class="player" id="player" hidden>
+  <div class="pin">
+    <div class="ph"><span id="ptitle"></span><a id="pyt" href="#">YouTubeで開く</a><button type="button" id="pclose">✕ とじる</button></div>
+    <p class="pmsg" id="pmsg" hidden></p>
+    <div class="pv"><div id="pframe"></div></div>
+  </div>
+</div>
+
+<script>
+const DATA = __DATA__;
+const Q = s => (s.startsWith("『") ? s : "「" + s + "」");
+if (DATA.embed) {
+  const player = document.getElementById("player");
+  const pmsg = document.getElementById("pmsg"), ptitle = document.getElementById("ptitle"), pyt = document.getElementById("pyt");
+  const byId = {}; Object.values(DATA.works).forEach(w => { byId[w.id] = w; });
+  const titleOf = id => { const w = byId[id]; return w ? `${w.c}${Q(w.w)}${w.p}` : ""; };
+  const BL = "embed-blocked-v1";
+  const blocked = new Set((() => { try { return JSON.parse(localStorage.getItem(BL) || "[]"); } catch { return []; } })());
+  const saveBlocked = () => { try { localStorage.setItem(BL, JSON.stringify([...blocked])); } catch {} };
+  (DATA.noEmbed || []).forEach(x => blocked.add(x));
+  let yt = null, list = [], skipped = 0, apiReady = null;
+  const loadApi = () => apiReady ||= new Promise(res => {
+    window.onYouTubeIframeAPIReady = res;
+    const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(s);
+  });
+  const showTitle = () => {
+    const i = yt && yt.getPlaylistIndex ? Math.max(0, yt.getPlaylistIndex()) : 0;
+    const id = list[i] || list[0];
+    ptitle.textContent = list.length > 1 ? `${i + 1}/${list.length}本目：${titleOf(id)}` : titleOf(id);
+    pyt.href = "https://www.youtube.com/watch?v=" + id;
+  };
+  const onError = () => {
+    const i = list.length > 1 && yt.getPlaylistIndex ? Math.max(0, yt.getPlaylistIndex()) : 0;
+    const id = list[i]; if (id) { blocked.add(id); saveBlocked(); }
+    if (list.length > 1 && i < list.length - 1) {
+      skipped++; pmsg.textContent = `YouTubeでしか見られない動画を${skipped}本とばしました。`; pmsg.hidden = false;
+      yt.nextVideo();
+    } else {
+      pmsg.textContent = "この動画は、持ち主の設定でYouTubeでしか見られません。右上の「YouTubeで開く」から見てください。"; pmsg.hidden = false;
+    }
+  };
+  async function play(ids, href) {
+    list = ids; skipped = 0; pmsg.hidden = true;
+    player.hidden = false; document.body.classList.add("playing");
+    showTitle();
+    await loadApi();
+    if (!yt) {
+      yt = new YT.Player("pframe", {
+        host: "https://www.youtube-nocookie.com",
+        playerVars: {autoplay: 1, rel: 0, playsinline: 1},
+        events: {
+          onReady: () => start(),
+          onError,
+          onStateChange: e => { if (e.data === 1 || e.data === -1) showTitle(); }
+        }
+      });
+    } else start();
+  }
+  function start() { if (list.length > 1) yt.loadPlaylist(list); else yt.loadVideoById(list[0]); }
+  document.addEventListener("click", ev => {
+    const a = ev.target.closest('a[href^="https://www.youtube.com/watch"]');
+    if (!a || a.id === "pyt") return;
+    const u = new URL(a.href);
+    const ids = u.pathname === "/watch_videos" ? (u.searchParams.get("video_ids") || "").split(",").filter(Boolean) : [u.searchParams.get("v")];
+    const playable = ids.filter(x => x && !blocked.has(x));
+    if (!playable.length) return;            // ページで再生できない動画は、そのまま YouTube で開く
+    ev.preventDefault();
+    play(playable, a.href);
+  });
+  document.getElementById("pclose").onclick = () => { if (yt && yt.stopVideo) yt.stopVideo(); player.hidden = true; document.body.classList.remove("playing"); };
+}
+const tocbtn = document.getElementById("tocbtn"), tocEl = document.getElementById("toc");
+const setToc = open => { tocEl.hidden = !open; tocbtn.setAttribute("aria-expanded", String(open)); tocbtn.textContent = open ? "✕ 目次をとじる" : "☰ 目次をひらく"; };
+tocbtn.onclick = () => setToc(tocEl.hidden);
+tocEl.addEventListener("click", e => { if (e.target.closest("a")) setToc(false); });
+document.getElementById("totop").onclick = () => { setToc(false); window.scrollTo({top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); };
+const W = DATA.works;
+const listUrl = keys => "https://www.youtube.com/watch_videos?video_ids=" + keys.map(k => (W[k] ? W[k].id : k)).join(",");
+const toSec = s => s.split(":").map(Number).reduce((a,b)=>a*60+b,0);
+const fmtTotal = sec => { const h=Math.floor(sec/3600), m=Math.round(sec%3600/60); return h ? `約${h}時間${m}分` : `約${m}分`; };
+const esc = s => s.replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const chunk = (a,n) => { const r=[]; for(let i=0;i<a.length;i+=n) r.push(a.slice(i,i+n)); return r; };
+
+const secsEl = document.getElementById("secs"), toc = document.getElementById("toc");
+document.getElementById("m-works").textContent = Object.keys(W).length + "曲";
+document.getElementById("m-secs").textContent = DATA.sections.length + "のリスト";
+
+DATA.sections.forEach((s, si) => {
+  const keys = s.g.flatMap(g=>g[1]);
+  const total = keys.reduce((a,k)=>a+toSec(W[k].len),0);
+  const a = document.createElement("a"); a.href = "#"+s.id; a.textContent = s.t; toc.appendChild(a);
+  const d = document.createElement("details"); d.className = "sec"; d.id = s.id; if (si===0) d.open = true;
+  const parts = chunk(keys, 50);
+  let html = `<summary><span class="sec-title">${esc(s.t)}</span><span class="sec-sub">${esc(s.lead)}　${keys.length}本・${fmtTotal(total)}</span></summary><div class="secbody">`;
+  html += `<div class="playall">` + parts.map((p,i)=>`<a href="${listUrl(p)}">▶ ${parts.length>1?`${i*50+1}〜${i*50+p.length}本目を`:"このリストを"}続けて再生</a>`).join("") + `</div>`;
+  let n = 0;
+  s.g.forEach(([gname, ks]) => {
+    if (gname) html += `<h3 class="grp">${esc(gname)}${s.g.length>1 && ks.length>1 ? `<a href="${listUrl(ks)}">▶ ${ks.length}本を続けて</a>` : ""}</h3>`;
+    html += `<ol class="program">`;
+    ks.forEach((k, i) => {
+      n++; const t = W[k]; const rest = keys.slice(n-1, n-1+50);
+      html += `<li class="card" data-key="${k}" data-text="${esc((t.c+t.w+t.p+t.pt+t.tr+gname+s.t).toLowerCase())}">
+        <div class="no">${n}</div>
+        <div class="body">
+          <div class="composer">${esc(t.c)}</div>
+          <p class="work">${esc(t.w)}<br><span class="part">${esc(t.p)}</span>　<span class="time">${t.len}</span></p>
+          <p class="point"><b>聴きどころ</b>${esc(t.pt)}</p>
+          <p class="trivia"><b>豆知識</b>${esc(t.tr)}</p>
+          <p class="perf">動画：${esc(t.ch)}</p>
+          <div class="links"><a class="go" href="https://www.youtube.com/watch?v=${t.id}">▶ この曲を聴く</a>${n<keys.length?`<a class="from" href="${listUrl(rest)}">ここから続けて再生</a>`:""}</div>
+          <div class="rate" role="group" aria-label="聴いた感想"><span>聴いたら：</span><button type="button" data-r="like" aria-pressed="false">好き</button><button type="button" data-r="ok" aria-pressed="false">ふつう</button><button type="button" data-r="dislike" aria-pressed="false">苦手</button></div>
+        </div></li>`;
+    });
+    html += `</ol>`;
+  });
+  d.innerHTML = html + `</div>`;
+  secsEl.appendChild(d);
+});
+
+function openFromHash(){ const id = location.hash.slice(1); const el = id && document.getElementById(id); if (el && el.tagName==="DETAILS"){ el.open = true; el.scrollIntoView({block:"start"}); } }
+window.addEventListener("hashchange", openFromHash); openFromHash();
+
+const q = document.getElementById("q"), hits = document.getElementById("hits");
+q.addEventListener("input", () => {
+  const v = q.value.trim().toLowerCase();
+  let c = 0;
+  document.querySelectorAll("details.sec").forEach(d => {
+    let any = false;
+    d.querySelectorAll(".card").forEach(card => { const ok = !v || card.dataset.text.includes(v); card.hidden = !ok; if (ok) { any = true; c++; } });
+    d.querySelectorAll("h3.grp").forEach(h => { const ol = h.nextElementSibling; h.hidden = v && ![...ol.children].some(li=>!li.hidden); });
+    d.hidden = !!v && !any;
+    if (v && any) d.open = true;
+  });
+  hits.textContent = v ? `${c}件みつかりました（同じ曲が複数のリストに入っていることがあります）` : "";
+});
+
+/* ---- 好き嫌いの記録とおすすめ ---- */
+const KIND = DATA.kind || "クラシック";
+const LABEL = {like:"好き", ok:"ふつう", dislike:"苦手"};
+const ratings = {};               // key -> "like" | "ok" | "dislike"
+let store = null;                 // db の ratings コレクション（使えないときは null）
+const LS = "ratings-v1";
+const loadLocal = () => { try { return JSON.parse(localStorage.getItem(LS) || "{}"); } catch { return {}; } };
+const saveLocal = () => { try { localStorage.setItem(LS, JSON.stringify(ratings)); } catch {} };
+
+// 曲ごとの所属（章とグループ）
+const groupsOf = {};
+DATA.sections.forEach(s => s.g.forEach(([gname, ks]) => ks.forEach(k => {
+  (groupsOf[k] ||= new Set()).add(s.id);
+  if (!(DATA.weakSections || []).includes(s.id)) groupsOf[k].add(s.id + "/" + gname);
+})));
+const shareGroup = (a, b) => [...groupsOf[a]].some(g => g.includes("/") && groupsOf[b].has(g));
+const shareSec = (a, b) => [...groupsOf[a]].some(g => !g.includes("/") && !(DATA.weakSections || []).includes(g) && groupsOf[b].has(g));
+
+function paintButtons(){
+  document.querySelectorAll(".card").forEach(card => {
+    const r = ratings[card.dataset.key];
+    card.querySelectorAll(".rate button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.r === r)));
+  });
+}
+
+function recommend(){
+  const rated = Object.keys(ratings).filter(k => W[k]);
+  const likes = rated.filter(k => ratings[k] === "like");
+  const dislikes = rated.filter(k => ratings[k] === "dislike");
+  const oks = rated.filter(k => ratings[k] === "ok");
+  const scores = [];
+  for (const k of Object.keys(W)) {
+    if (ratings[k]) continue;
+    let s = 0, why = null, best = 0;
+    for (const L of likes) {
+      let add = 0, reason = "";
+      if (W[L].c === W[k].c) { add += 3; reason = "同じ作曲家"; }
+      if (shareGroup(L, k)) { add += 2; reason = reason || "同じなかま"; }
+      else if (shareSec(L, k)) { add += 1; reason = reason || "同じ章"; }
+      if (add > best) { best = add; why = `${Q(W[L].w)}が好きなら（${reason}）`; }
+      s += add;
+    }
+    for (const O of oks) if (W[O].c === W[k].c) s += 0.5;
+    for (const D of dislikes) { if (W[D].c === W[k].c) s -= 2; if (shareGroup(D, k)) s -= 1; }
+    if (s > 0) scores.push({k, s, why});
+  }
+  scores.sort((a,b) => b.s - a.s);
+  const per = {}, top = [];
+  for (const x of scores) { const c = W[x.k].c; if ((per[c] || 0) >= 2) continue; per[c] = (per[c] || 0) + 1; top.push(x); if (top.length >= 8) break; }
+  if (likes.length && top.length < 8) {
+    const disliked = new Set(dislikes.map(d => W[d].c));
+    const staples = DATA.sections.filter(s => (DATA.stapleSections || []).includes(s.id)).flatMap(s => s.g.flatMap(g => g[1]));
+    for (const k of staples) {
+      if (top.length >= 8) break;
+      if (ratings[k] || top.some(x => x.k === k) || disliked.has(W[k].c) || (per[W[k].c] || 0) >= 2) continue;
+      per[W[k].c] = (per[W[k].c] || 0) + 1; top.push({k, s: 0, why: "まだ聴いていない定番の名曲"});
+    }
+  }
+  return {rated, likes, dislikes, oks, top};
+}
+
+function renderRecs(){
+  const {rated, likes, dislikes, oks, top} = recommend();
+  const stat = document.getElementById("r-stat"), list = document.getElementById("r-list"), btns = document.getElementById("r-btns");
+  list.innerHTML = ""; btns.innerHTML = "";
+  if (!rated.length) { stat.textContent = "聴いた曲に「好き・ふつう・苦手」をつけると、ここに次のおすすめが出ます。"; return; }
+  stat.textContent = `これまでに${rated.length}曲を記録（好き${likes.length}・ふつう${oks.length}・苦手${dislikes.length}）。`;
+  if (!likes.length) { stat.textContent += "「好き」が1曲以上あると、おすすめが出ます。"; }
+  top.forEach(({k, why}) => {
+    const t = W[k]; const li = document.createElement("li");
+    li.innerHTML = `<a href="https://www.youtube.com/watch?v=${t.id}">${esc(t.c)}${esc(Q(t.w))}</a>　${esc(t.p)}<small>${esc(why || "")}</small>`;
+    list.appendChild(li);
+  });
+  if (top.length) {
+    const a = document.createElement("a"); a.href = listUrl(top.map(x => W[x.k].id)); a.textContent = "▶ おすすめを続けて再生"; btns.appendChild(a);
+  }
+  if (sampleFn && likes.length) {
+    const b = document.createElement("button"); b.type = "button"; b.id = "ask-ai";
+    b.textContent = "Claudeに、リストにない曲もおすすめしてもらう"; b.onclick = askClaude; btns.appendChild(b);
+  }
+}
+
+let sampleFn = null;
+async function askClaude(){
+  const out = document.getElementById("ai-out"), btn = document.getElementById("ask-ai");
+  const {likes, dislikes, oks} = recommend();
+  const name = k => `${W[k].c}${Q(W[k].w)}${W[k].p}`;
+  const prompt = `あなたは${KIND}にくわしい案内役です。聴き始めたばかりの人に、次に聴く曲をすすめてください。
+好きだった曲：\n${likes.map(name).join("\n") || "なし"}
+ふつうだった曲：\n${oks.map(name).join("\n") || "なし"}
+苦手だった曲：\n${dislikes.map(name).join("\n") || "なし"}
+すでに手元のリストにある曲（これ以外から選ぶ）：\n${Object.values(W).map(w => w.c + Q(w.w)).join("、")}
+上の好みに合いそうで、リストにない${KIND}の曲（または${KIND === "オペラ" ? "アリア・場面" : "楽章"}）を5つ選んでください。
+JSONの配列だけで答えてください。各要素は {"composer": 作曲家の日本語名, "title": 曲名の日本語, "part": 聴く部分（例：第2楽章）, "reason": なぜ合いそうか（40字以内、やさしい日本語）, "search": YouTubeで探すための英語の検索語} です。`;
+  btn.disabled = true; out.innerHTML = `<p class="stat">考えています…（数十秒かかることがあります）</p>`;
+  try {
+    const res = await sampleFn.json(prompt);
+    if (!Array.isArray(res) || !res.length) throw {code: "invalid_json"};
+    out.innerHTML = `<p class="stat">Claudeのおすすめ（リストにない曲。YouTubeの検索結果が開きます）</p><ol>` + res.slice(0, 5).map(x =>
+      `<li><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(String(x.search || x.title || ""))}">${esc(String(x.composer || ""))}「${esc(String(x.title || ""))}」</a>　${esc(String(x.part || ""))}<small>${esc(String(x.reason || ""))}</small></li>`).join("") + `</ol>`;
+  } catch (e) {
+    const msg = {not_granted: "Claudeを使う許可がないため、使えませんでした。", rate_limited: "いまは混みあっています。少し時間をおいてから押してください。"}[e && e.code];
+    out.innerHTML = `<p class="stat">${msg || "うまく答えを受け取れませんでした。もう一度押してみてください。"}</p>`;
+    if (e && (e.code === "not_granted" || e.code === "sampling_disabled")) { btn.remove(); sampleFn = null; }
+  } finally { if (btn.isConnected) btn.disabled = false; }
+}
+
+async function setRating(key, r){
+  const prev = ratings[key];
+  const next = prev === r ? null : r;
+  if (next) ratings[key] = next; else delete ratings[key];
+  paintButtons(); renderRecs(); saveLocal();
+  if (store) {
+    try { next ? await store.doc(key).set({r: next, title: W[key].c + Q(W[key].w), at: new Date().toISOString()}) : await store.doc(key).delete(); }
+    catch (e) { document.getElementById("r-note").textContent = "記録をサーバーに保存できませんでした。この端末の中にだけ残しています。"; }
+  }
+}
+
+secsEl.addEventListener("click", ev => {
+  const b = ev.target.closest(".rate button"); if (!b) return;
+  setRating(b.closest(".card").dataset.key, b.dataset.r);
+});
+
+Object.assign(ratings, loadLocal());
+paintButtons(); renderRecs();
+
+(async () => {
+  const note = document.getElementById("r-note");
+  const db = window.claude ? await window.claude.use("db").catch(() => null) : null;
+  if (!db) { note.textContent = "記録はこの端末の中にだけ保存されます（ほかの端末やClaudeからは見えません）。"; return; }
+  store = db.collection("ratings");
+  note.textContent = "記録を読みこみ中…";
+  const timer = setTimeout(() => { note.textContent = "記録の保存先にまだつながりません。つながるまではこの端末の中に保存します。"; }, 10000);
+  store.onSnapshot(snap => {
+    if (!snap.metadata.fromCache) { clearTimeout(timer); note.textContent = "記録は保存され、ほかの端末やチャットのClaudeからも見られます。"; }
+    for (const k of Object.keys(ratings)) delete ratings[k];
+    snap.docs.forEach(d => { const v = d.data(); if (v && LABEL[v.r]) ratings[d.id] = v.r; });
+    saveLocal(); paintButtons(); renderRecs();
+  }, () => { clearTimeout(timer); store = null; note.textContent = "記録の保存先が使えないため、この端末の中にだけ保存しています。"; });
+  sampleFn = await window.claude.use("sample").catch(() => null);
+  renderRecs();
+})();
+</script>
