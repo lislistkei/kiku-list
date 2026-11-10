@@ -72,6 +72,7 @@ details.lyr .lyn{margin:0 12px 8px;font-size:12.5px;color:var(--muted)}
 .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
 .links a{font-size:14px;text-decoration:none;border-radius:8px;padding:7px 12px;font-weight:700}
 .links a.go{background:var(--ink);color:var(--bg)}
+.links a.ytb,.playall a.ytb{background:#c4302b;color:#fff;font-weight:700}
 .links a.from{border:1px solid var(--line);color:var(--ink);font-weight:500}
 a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .rate{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
@@ -262,7 +263,7 @@ if (DATA.embed) {
   });
   document.addEventListener("click", ev => {
     const a = ev.target.closest('a[href^="https://www.youtube.com/watch"]');
-    if (!a || a.id === "pyt" || mode === "app") return;
+    if (!a || a.id === "pyt" || "yt" in a.dataset || mode === "app") return;
     const u = new URL(a.href);
     const ids = u.pathname === "/watch_videos" ? (u.searchParams.get("video_ids") || "").split(",").filter(Boolean) : [u.searchParams.get("v")];
     const playable = ids.filter(x => x && !blocked.has(x));
@@ -295,7 +296,7 @@ DATA.sections.forEach((s, si) => {
   const d = document.createElement("details"); d.className = "sec"; d.id = s.id; if (si===0) d.open = true;
   const parts = chunk(keys, 50);
   let html = `<summary><span class="sec-title">${esc(s.t)}</span><span class="sec-sub">${esc(s.lead)}　${keys.length}本・${fmtTotal(total)}</span></summary><div class="secbody">`;
-  html += `<div class="playall">` + parts.map((p,i)=>`<a href="${listUrl(p)}">▶ ${parts.length>1?`${i*50+1}〜${i*50+p.length}本目を`:"このリストを"}続けて再生</a>`).join("") + `</div>`;
+  html += `<div class="playall">` + parts.map((p,i)=>`<a href="${listUrl(p)}">▶ ${parts.length>1?`${i*50+1}〜${i*50+p.length}本目を`:"このリストを"}続けて再生</a>` + (DATA.embed?`<a class="ytb" data-yt href="${listUrl(p)}">YouTubeで${parts.length>1?`（${i*50+1}〜）`:""}</a>`:"")).join("") + `</div>`;
   let n = 0;
   s.g.forEach(([gname, ks]) => {
     if (gname) html += `<h3 class="grp">${esc(gname)}${s.g.length>1 && ks.length>1 ? `<a href="${listUrl(ks)}">▶ ${ks.length}本を続けて</a>` : ""}</h3>`;
@@ -311,7 +312,7 @@ DATA.sections.forEach((s, si) => {
           <p class="trivia"><b>豆知識</b>${esc(t.tr)}</p>
           ${t.ly ? `<details class="lyr" data-key="${k}"><summary>${t.ly.g ? "歌詞の大意" : t.ly.b ? "歌詞の対訳（原文と訳）" : "歌詞の訳（全文）"}<span style="font-weight:400;color:var(--muted)">　${esc(t.ly.l||"")}</span></summary></details>` : ""}
           <p class="perf">動画：${esc(t.ch)}</p>
-          <div class="links"><a class="go" href="https://www.youtube.com/watch?v=${t.id}">▶ この曲を聴く</a>${n<keys.length?`<a class="from" href="${listUrl(rest)}">ここから続けて再生</a>`:""}</div>
+          <div class="links"><a class="go" href="https://www.youtube.com/watch?v=${t.id}">▶ この曲を聴く</a>${DATA.embed?`<a class="ytb" data-yt href="https://www.youtube.com/watch?v=${t.id}">YouTubeで</a>`:""}${n<keys.length?`<a class="from" href="${listUrl(rest)}">ここから続けて再生</a>`:""}</div>
           <div class="rate" role="group" aria-label="聴いた感想"><span>聴いたら：</span><button type="button" data-r="like" aria-pressed="false">好き</button><button type="button" data-r="ok" aria-pressed="false">ふつう</button><button type="button" data-r="dislike" aria-pressed="false">苦手</button></div>
         </div></li>`;
     });

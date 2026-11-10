@@ -15,6 +15,15 @@ for f in sorted((D/'lyrics').glob('part*.json')) + [D/'lyrics'/'gist.json']:
     for k, v in json.loads(f.read_text(encoding='utf-8')).items():
         assert k in W, ('lyrics: no work', k, f.name)
         LY[k] = dict(t=v['t'].strip(), l=v.get('lang', ''), n=v.get('note', ''), **({'g': 1} if v.get('g') else {}))
+# 対訳（lyrics/bi*.json：原文1行と訳1行の組）。あれば全文訳の代わりに使う
+CODE = {'イタリア語': 'it', 'ドイツ語': 'de', 'フランス語': 'fr', '英語': 'en', 'ロシア語': 'ru', 'チェコ語': 'cs', 'ラテン語': 'la'}
+NB = 0
+for f in sorted((D/'lyrics').glob('bi*.json')):
+    for k, v in json.loads(f.read_text(encoding='utf-8')).items():
+        if not v.get('b'): continue
+        assert k in LY and all(isinstance(p, list) and len(p) == 2 for p in v['b']), ('bad bi', k)
+        LY[k]['b'] = v['b']; LY[k]['c'] = CODE.get(LY[k]['l'], ''); del LY[k]['t']; NB += 1
+print('bilingual', NB)
 for alias, base in {'callas-casta': 'norma', 'three-nessun': 'tur-nessun', 'pavarotti-pira': 'trov-pira'}.items():
     if base in LY: LY[alias] = LY[base]
 for k, v in LY.items(): W[k]['ly'] = v
