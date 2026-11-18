@@ -123,7 +123,44 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .player iframe,.player #pframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .player .pmsg{margin:0;font-size:12.5px;color:var(--accent)}
 body.playing{padding-bottom:calc(40vh + 40px)}
-details.sec,#recs{scroll-margin-top:calc(70px + env(safe-area-inset-top,0px))}
+/* 今日の1曲・聴いたボタン・聴いた記録 */
+.today{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.today .tlabel{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--accent)}
+.today .tcomp{font-size:13px;color:var(--muted)}
+.today .twork{font-family:var(--f-display);font-weight:600;font-size:19px;line-height:1.45;margin:0}
+.today .tpt{margin:0;font-size:14px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.today .tbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.today .tbtns a{font-size:14px;font-weight:700;text-decoration:none;border-radius:8px;padding:8px 12px}
+.today .tbtns a.tjump{background:var(--accent);color:var(--accent-ink)}
+.today .tbtns a.go{background:var(--ink);color:var(--bg)}
+.today .tdone{font-size:13px;color:var(--muted);margin:0}
+details.log{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:0 16px}
+details.log>summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:12px 0}
+details.log>summary::-webkit-details-marker{display:none}
+details.log .ltitle{font-family:var(--f-display);font-weight:600;font-size:17px}
+details.log .ltitle::before{content:"＋ ";font-family:var(--f-body);font-size:14px;color:var(--accent)}
+details.log[open] .ltitle::before{content:"－ "}
+details.log .lnum{font-size:13px;color:var(--muted)}
+details.log .lnum b{font-size:18px;color:var(--ink);font-variant-numeric:tabular-nums}
+.week{display:flex;gap:6px;margin:0;padding:0;list-style:none}
+.week li{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--muted);width:26px}
+.week i{display:block;width:18px;height:18px;border-radius:50%;border:2px solid var(--line);box-sizing:border-box}
+.week li.on i{background:var(--accent);border-color:var(--accent)}
+.week li.now span{font-weight:700;color:var(--ink)}
+.logbody{display:flex;flex-direction:column;gap:8px;padding-bottom:14px}
+.logbody .lstat{margin:0;font-size:13px;color:var(--muted)}
+ol.loglist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+ol.loglist li{display:grid;grid-template-columns:5.2em 1fr;gap:8px;padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+ol.loglist li .ld{color:var(--muted);font-size:12.5px;font-variant-numeric:tabular-nums}
+ol.loglist li a{color:var(--ink);text-decoration:none;font-weight:700}
+ol.loglist li small{display:block;color:var(--muted);font-size:12px;font-weight:400}
+.logbody button.more{align-self:flex-start;font:inherit;font-size:13px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:5px 14px;cursor:pointer}
+.heard{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.heard button{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--accent);background:var(--bg);color:var(--accent);border-radius:999px;padding:4px 14px;cursor:pointer}
+.heard button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.heard button:focus-visible,details.log>summary:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.heard small{font-size:12px;color:var(--muted)}
+details.sec,#recs,#log{scroll-margin-top:calc(70px + env(safe-area-inset-top,0px))}
 /* スマホ：横の余白をつめ、字をひとまわり小さく（縦長になりすぎないように） */
 @media (max-width:600px){
   body{font-size:14.5px;line-height:1.6;padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
@@ -160,6 +197,15 @@ details.sec,#recs{scroll-margin-top:calc(70px + env(safe-area-inset-top,0px))}
     <h1>__TITLE__</h1>
     <p class="lead">__LEAD__</p>
     <div class="meta"><span id="m-works">—曲</span><span id="m-secs">—のリスト</span><span>公式チャンネルを中心に選曲</span></div>
+    <section class="today" id="today" aria-label="今日の1曲" hidden></section>
+    <details class="log" id="log">
+      <summary><span class="ltitle">聴いた記録</span><span class="lnum">今月 <b id="l-month">0</b> 曲</span><ul class="week" id="l-week" aria-label="この1週間に聴いた日"></ul></summary>
+      <div class="logbody">
+        <p class="lstat" id="l-stat"></p>
+        <ol class="loglist" id="l-list"></ol>
+        <button type="button" class="more" id="l-more" hidden>もっと見る</button>
+      </div>
+    </details>
     <div class="search">
       <label for="q">曲名・作曲家・ことばで探す（例：ショパン、運動会、のだめ）</label>
       <input id="q" type="search" placeholder="さがす" autocomplete="off">
@@ -321,6 +367,7 @@ DATA.sections.forEach((s, si) => {
           ${t.ly ? `<details class="lyr" data-key="${k}"><summary>${t.ly.g ? "歌詞の大意" : t.ly.b ? "歌詞の対訳（原文と訳）" : "歌詞の訳（全文）"}<span style="font-weight:400;color:var(--muted)">　${esc(t.ly.l||"")}</span></summary></details>` : ""}
           <p class="perf">動画：${esc(t.ch)}</p>
           <div class="links"><a class="go" href="https://www.youtube.com/watch?v=${t.id}">▶ この曲を聴く</a>${DATA.embed?`<a class="ytb" data-yt href="https://www.youtube.com/watch?v=${t.id}">YouTubeで</a>`:""}${n<keys.length?`<a class="from" href="${listUrl(rest)}">ここから続けて再生</a>`:""}</div>
+          <div class="heard"><button type="button" class="hbtn" aria-pressed="false">聴いた</button><small></small></div>
           <div class="rate" role="group" aria-label="聴いた感想"><span>聴いたら：</span><button type="button" data-r="like" aria-pressed="false">好き</button><button type="button" data-r="ok" aria-pressed="false">ふつう</button><button type="button" data-r="dislike" aria-pressed="false">苦手</button></div>
         </div></li>`;
     });
@@ -375,6 +422,106 @@ function openFromHash(){
   }
 }
 window.addEventListener("hashchange", openFromHash); openFromHash();
+
+/* ---- 今日の1曲・聴いた記録（この端末のブラウザにだけ保存。4つのページで共通の記録） ---- */
+const PAGE = DATA.page || "", GENRE = DATA.kind || "クラシック";
+const pad = n => String(n).padStart(2, "0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const WD = "日月火水木金土";
+const mdw = s => { const d = new Date(s + "T00:00:00"); return `${d.getMonth() + 1}/${d.getDate()}（${WD[d.getDay()]}）`; };
+const titleKey = k => `${W[k].c}${Q(W[k].w)}${W[k].p}`;
+
+// 今日の1曲：日付から決める（その日のうちは同じ曲。このページの曲から選ぶ）
+function renderToday(){
+  const keys = [...document.querySelectorAll('.card[id^="k-"]')].map(c => c.dataset.key).sort();
+  const el = document.getElementById("today"); if (!keys.length) return;
+  const today = ymd(new Date());
+  let h = 2166136261; for (const ch of today + PAGE + GENRE) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  const k = keys[h % keys.length], t = W[k];
+  el.dataset.key = k;
+  el.innerHTML = `<span class="tlabel">今日の1曲　${mdw(today)}</span>
+    <span class="tcomp">${esc(t.c)}</span>
+    <p class="twork">${esc(t.w)}　<span class="part">${esc(t.p)}</span></p>
+    <p class="tpt">${esc(t.pt)}</p>
+    <div class="tbtns"><a class="tjump" href="#k-${encodeURIComponent(k)}">聴きどころを読む ↓</a><a class="go" href="https://www.youtube.com/watch?v=${t.id}">▶ 再生</a></div>
+    <p class="tdone" id="t-done"></p>`;
+  el.hidden = false;
+  el.querySelector(".tjump").addEventListener("click", ev => {
+    ev.preventDefault(); history.replaceState(null, "", "#k-" + k); openFromHash();
+  });
+}
+renderToday();
+
+const HK = "listened-v1";
+const loadHeard = () => { try { const v = JSON.parse(localStorage.getItem(HK) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; } };
+let heard = loadHeard();          // [{p:ページ, g:ジャンル, k:キー, t:曲名, d:"YYYY-MM-DD", at:時刻}]
+const saveHeard = () => { try { localStorage.setItem(HK, JSON.stringify(heard)); return true; } catch { return false; } };
+const mine = e => e.p === PAGE && e.g === GENRE;
+let logShown = 30;
+
+function paintHeard(){
+  const today = ymd(new Date());
+  const last = {}, count = {};
+  heard.forEach(e => { if (!mine(e)) return; count[e.k] = (count[e.k] || 0) + 1; if (!last[e.k] || e.d > last[e.k]) last[e.k] = e.d; });
+  document.querySelectorAll(".card").forEach(card => {
+    const k = card.dataset.key, b = card.querySelector(".hbtn"), s = card.querySelector(".heard small");
+    const on = last[k] === today;
+    b.setAttribute("aria-pressed", String(on));
+    b.textContent = on ? "✓ 今日聴いた" : "聴いた";
+    s.textContent = !count[k] ? "" : on ? (count[k] > 1 ? `${count[k]}回目（もう一度押すと取り消し）` : "もう一度押すと取り消し") : `前に聴いた日：${mdw(last[k])}（${count[k]}回）`;
+  });
+  const td = document.getElementById("t-done"), tk = document.getElementById("today").dataset.key;
+  if (td && tk) td.textContent = last[tk] === today ? "✓ 今日の1曲を聴きました" : "";
+}
+
+function renderLog(){
+  const now = new Date(), today = ymd(now), month = today.slice(0, 7);
+  document.getElementById("l-month").textContent = new Set(heard.filter(e => e.d.startsWith(month)).map(e => e.t)).size;
+  const days = new Set(heard.map(e => e.d));
+  const wk = document.getElementById("l-week"); wk.innerHTML = "";
+  let n7 = 0;
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i), s = ymd(d), on = days.has(s);
+    if (on) n7++;
+    const li = document.createElement("li"); li.className = (on ? "on" : "") + (i === 0 ? " now" : "");
+    li.title = `${mdw(s)}${on ? "　聴いた" : ""}`;
+    li.innerHTML = `<i></i><span>${i === 0 ? "今日" : WD[d.getDay()]}</span>`;
+    wk.appendChild(li);
+  }
+  wk.setAttribute("aria-label", `この1週間に聴いた日：7日のうち${n7}日`);
+  const list = document.getElementById("l-list"), more = document.getElementById("l-more"), stat = document.getElementById("l-stat");
+  const rows = heard.slice().sort((a, b) => (b.d + (b.at || "")).localeCompare(a.d + (a.at || "")));
+  stat.textContent = rows.length
+    ? `これまでに${rows.length}回（${new Set(rows.map(e => e.t)).size}曲）。この1週間は7日のうち${n7}日聴きました。4つのページの記録をまとめて出しています。`
+    : "曲の「聴いた」を押すと、ここに聴いた日と曲が残ります（この端末の中だけ）。";
+  list.innerHTML = rows.slice(0, logShown).map(e => {
+    const here = mine(e) && W[e.k];
+    const href = here ? `#k-${encodeURIComponent(e.k)}` : e.p ? `../${e.p}/#k-${encodeURIComponent(e.k)}` : "";
+    return `<li><span class="ld">${mdw(e.d)}</span><span>${href ? `<a href="${href}">${esc(e.t)}</a>` : `<b>${esc(e.t)}</b>`}<small>${esc(e.g || "")}</small></span></li>`;
+  }).join("");
+  more.hidden = rows.length <= logShown;
+}
+
+function toggleHeard(k){
+  const today = ymd(new Date());
+  const i = heard.findIndex(e => mine(e) && e.k === k && e.d === today);
+  if (i >= 0) heard.splice(i, 1);
+  else heard.push({p: PAGE, g: GENRE, k, t: titleKey(k), d: today, at: new Date().toISOString()});
+  if (!saveHeard()) document.getElementById("l-stat").textContent = "このブラウザでは記録を保存できませんでした（プライベートモードなど）。";
+  paintHeard(); renderLog();
+}
+
+secsEl.addEventListener("click", ev => {
+  const b = ev.target.closest(".hbtn"); if (!b) return;
+  toggleHeard(b.closest(".card").dataset.key);
+});
+document.getElementById("l-more").onclick = () => { logShown += 50; renderLog(); };
+document.getElementById("l-list").addEventListener("click", ev => {
+  const a = ev.target.closest('a[href^="#k-"]'); if (!a) return;
+  ev.preventDefault(); history.replaceState(null, "", a.getAttribute("href")); openFromHash();
+});
+window.addEventListener("storage", e => { if (e.key === HK) { heard = loadHeard(); paintHeard(); renderLog(); } });
+paintHeard(); renderLog();
 
 const q = document.getElementById("q"), hits = document.getElementById("hits");
 q.addEventListener("input", () => {

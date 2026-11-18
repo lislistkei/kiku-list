@@ -14,7 +14,8 @@ TAIL = '\n</body></html>\n'
 def build(src, dst):
     h = (D / src).read_text(encoding='utf-8')
     assert '"kind":' in h
-    h = h.replace('"kind":', '"embed":true,"noEmbed":["bVPBABVYsz8"],"kind":', 1)
+    # page＝フォルダ名（聴いた記録から、ほかのページの曲へリンクするのに使う）
+    h = h.replace('"kind":', '"embed":true,"noEmbed":["bVPBABVYsz8"],"page":"%s","kind":' % dst, 1)
     h = h.replace('▶ この曲を聴く', '▶ 再生')
     h = h.replace('<footer>', '<footer><a href="../">← 聴くリストのトップへ</a>　', 1)
     # 選択画面（トップ）へ戻るボタン：ページの頭と、上に残るバーの2か所
